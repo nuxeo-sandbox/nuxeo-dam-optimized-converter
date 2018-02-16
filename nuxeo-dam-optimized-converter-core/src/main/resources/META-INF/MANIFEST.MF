@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0
 Bundle-Name: nuxeo-dam-optimized-converter-core
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nuxeo-dam-optimized-converter-core;singleton=true
-Nuxeo-Component: OSGI-INF/converter-contrib.xml,
+Nuxeo-Component: OSGI-INF/picture-converter-contrib.xml,
+    OSGI-INF/video-converter-contrib.xml,
     OSGI-INF/commandline-contrib.xml,
     OSGI-INF/listener-contrib.xml

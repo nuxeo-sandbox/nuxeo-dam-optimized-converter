@@ -1,0 +1,12 @@
+<component name="org.nuxeo.labs.dam.converters.pictures">
+    <require>org.nuxeo.labs.dam.converters.commandline</require>
+    <extension point="converter" target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl">
+
+        <converter class="org.nuxeo.labs.dam.converters.converters.SerialJpegConverter" name="serialJpegResizer">
+            <parameters>
+                <parameter name="CommandLineName">serialJpegResizer</parameter>
+            </parameters>
+        </converter>
+
+    </extension>
+</component>

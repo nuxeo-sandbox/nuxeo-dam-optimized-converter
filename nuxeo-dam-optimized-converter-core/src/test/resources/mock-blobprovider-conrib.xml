@@ -1,0 +1,7 @@
+<component name="mock-blobprovider" version="1.0">
+    <extension target="org.nuxeo.ecm.core.blob.BlobManager" point="configuration">
+        <blobprovider name="mockprovider">
+            <class>org.nuxeo.labs.dam.converters.mock.MockHttpBlobprovider</class>
+        </blobprovider>
+    </extension>
+</component>

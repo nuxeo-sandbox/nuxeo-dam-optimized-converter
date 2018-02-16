@@ -29,7 +29,6 @@ import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
-import org.nuxeo.labs.dam.converters.converters.SerialJpegConverter;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -48,7 +47,7 @@ import static org.junit.Assert.assertTrue;
 @Deploy({
         "nuxeo-dam-optimized-converter-core"
 })
-public class TestConverter {
+public class TestSerialJpegConverter {
 
     @Inject
     ConversionService conversionService;
@@ -62,7 +61,6 @@ public class TestConverter {
     public void testConverter() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
         Map<String, Serializable> parameters = new HashMap<>();
-        parameters.put(SerialJpegConverter.SOURCE_FILE_PATH_KEY,file.getAbsolutePath());
         BlobHolder result = conversionService.convert("serialJpegResizer",new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
         Assert.assertEquals(4,result.getBlobs().size());
 
