@@ -1,0 +1,10 @@
+<component name="org.nuxeo.labs.dam.converters.listeners">
+    <require>org.nuxeo.ecm.platform.picture.listeners</require>
+    <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+        <listener name="pictureViewsGenerationListener" async="false" postCommit="false"
+                  class="org.nuxeo.labs.dam.converters.listeners.CustomPictureViewsGenerationListener" priority="20">
+            <event>documentCreated</event>
+            <event>documentModified</event>
+        </listener>
+    </extension>
+</component>
