@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.nuxeo.ecm.core.api.CoreSession.ALLOW_VERSION_WRITE;
+import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTURE_INFO_PROPERTY;
 import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter.VIEWS_PROPERTY;
 
 public class PictureSerialConversionWorker extends AbstractWork {
@@ -77,7 +78,11 @@ public class PictureSerialConversionWorker extends AbstractWork {
         setStatus("Running conversions");
 
         List<PictureView> viewList;
+        ImageInfo imageInfo = null;
+
         try {
+            ImagingService imagingService = Framework.getService(ImagingService.class);
+            imageInfo = imagingService.getImageInfo(blob);
             ConversionService conversionService = Framework.getService(ConversionService.class);
             BlobHolder result = conversionService.convert("serialJpegResizer", new SimpleBlobHolder(blob), new HashMap<>());
             viewList = buildViews(result.getBlobs());
@@ -91,6 +96,7 @@ public class PictureSerialConversionWorker extends AbstractWork {
             views.add(pictureView.asMap());
         }
 
+        workingDocument.setPropertyValue(PICTURE_INFO_PROPERTY, (Serializable) imageInfo.toMap());
         workingDocument.setPropertyValue(VIEWS_PROPERTY, (Serializable) views);
 
         setStatus("Saving");
