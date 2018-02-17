@@ -13,10 +13,7 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.versioning.VersioningService;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.ecm.core.work.api.WorkManager;
-import org.nuxeo.ecm.platform.picture.api.ImagingService;
-import org.nuxeo.ecm.platform.picture.api.PictureConversion;
-import org.nuxeo.ecm.platform.picture.api.PictureView;
-import org.nuxeo.ecm.platform.picture.api.PictureViewImpl;
+import org.nuxeo.ecm.platform.picture.api.*;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
@@ -159,9 +156,13 @@ public class PictureSerialConversionWorker extends AbstractWork {
             }
 
             PictureView view = new PictureViewImpl();
+            ImageInfo imageInfo = imagingService.getImageInfo(blob);
             view.setTitle(id);
             view.setBlob(blob);
-            view.setImageInfo(imagingService.getImageInfo(blob));
+            view.setHeight(imageInfo.getHeight());
+            view.setWidth(imageInfo.getWidth());
+            view.setDescription(conversion.getDescription());
+            view.setImageInfo(imageInfo);
             pictureViews.add(view);
         }
 
