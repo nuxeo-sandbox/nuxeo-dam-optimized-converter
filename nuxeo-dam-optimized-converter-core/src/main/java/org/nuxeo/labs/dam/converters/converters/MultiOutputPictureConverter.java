@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SerialJpegConverter extends CommandLineBasedConverter {
+public class MultiOutputPictureConverter extends CommandLineBasedConverter {
 
     public static final String SOURCE_FILE_PATH_KEY = "inputFilePath";
     public static final String OUT_DIR_PATH_KEY = "outDirPath";

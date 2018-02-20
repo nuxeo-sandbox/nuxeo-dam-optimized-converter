@@ -25,7 +25,7 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.work.api.WorkManager;
-import org.nuxeo.labs.dam.converters.workers.PictureSerialConversionWorker;
+import org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker;
 import org.nuxeo.runtime.api.Framework;
 
 import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTURE_FACET;
@@ -56,7 +56,7 @@ public class CustomPictureViewsGenerationListener implements EventListener {
         DocumentEventContext docCtx = (DocumentEventContext) ctx;
         DocumentModel doc = docCtx.getSourceDocument();
         if (doc.hasFacet(PICTURE_FACET) && !doc.isProxy()) {
-            PictureSerialConversionWorker work = new PictureSerialConversionWorker(doc.getRepositoryName(), doc.getId(),
+            PictureMultiConversionWorker work = new PictureMultiConversionWorker(doc.getRepositoryName(), doc.getId(),
                     "file:content");
             WorkManager workManager = Framework.getService(WorkManager.class);
             workManager.schedule(work, WorkManager.Scheduling.IF_NOT_SCHEDULED, true);

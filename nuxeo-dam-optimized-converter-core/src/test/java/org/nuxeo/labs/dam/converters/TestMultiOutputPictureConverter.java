@@ -35,11 +35,10 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
+import static org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker.CONVERTER_NAME;
 
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -47,25 +46,24 @@ import static org.junit.Assert.assertTrue;
 @Deploy({
         "nuxeo-dam-optimized-converter-core"
 })
-public class TestSerialJpegConverter {
+public class TestMultiOutputPictureConverter {
 
     @Inject
     ConversionService conversionService;
 
     @Test
     public void isLoaded() {
-        assertTrue(conversionService.getRegistredConverters().contains("serialJpegResizer"));
+        assertTrue(conversionService.getRegistredConverters().contains(CONVERTER_NAME));
     }
 
     @Test
     public void testConverter() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
-        Map<String, Serializable> parameters = new HashMap<>();
-        BlobHolder result = conversionService.convert("serialJpegResizer",new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
+        BlobHolder result = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
         Assert.assertEquals(4,result.getBlobs().size());
 
         //test conversions are cached correctly
-        BlobHolder result2 = conversionService.convert("serialJpegResizer",new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
+        BlobHolder result2 = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
         Assert.assertEquals(4,result2.getBlobs().size());
     }
 

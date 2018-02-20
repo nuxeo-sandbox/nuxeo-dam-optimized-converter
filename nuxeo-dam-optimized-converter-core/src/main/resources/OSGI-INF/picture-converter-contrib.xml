@@ -2,9 +2,9 @@
     <require>org.nuxeo.labs.dam.converters.commandline</require>
     <extension point="converter" target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl">
 
-        <converter class="org.nuxeo.labs.dam.converters.converters.SerialJpegConverter" name="serialJpegResizer">
+        <converter class="org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter" name="MultiOutputPictureResize">
             <parameters>
-                <parameter name="CommandLineName">serialJpegResizer</parameter>
+                <parameter name="CommandLineName">MultiOutputPictureResize</parameter>
             </parameters>
         </converter>
 

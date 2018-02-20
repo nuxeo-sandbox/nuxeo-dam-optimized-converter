@@ -28,7 +28,7 @@ import static org.nuxeo.ecm.core.api.CoreSession.ALLOW_VERSION_WRITE;
 import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTURE_INFO_PROPERTY;
 import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter.VIEWS_PROPERTY;
 
-public class PictureSerialConversionWorker extends AbstractWork {
+public class PictureMultiConversionWorker extends AbstractWork {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,9 +36,11 @@ public class PictureSerialConversionWorker extends AbstractWork {
 
     public static final String PICTURE_VIEWS_GENERATION_DONE_EVENT = "pictureViewsGenerationDone";
 
+    public static final String CONVERTER_NAME = "MultiOutputPictureResize";
+
     protected final String xpath;
 
-    public PictureSerialConversionWorker(String repositoryName, String docId, String xpath) {
+    public PictureMultiConversionWorker(String repositoryName, String docId, String xpath) {
         super(repositoryName + ':' + docId + ':' + xpath + ":pictureView");
         setDocument(repositoryName, docId);
         this.xpath = xpath;
@@ -84,7 +86,7 @@ public class PictureSerialConversionWorker extends AbstractWork {
             ImagingService imagingService = Framework.getService(ImagingService.class);
             imageInfo = imagingService.getImageInfo(blob);
             ConversionService conversionService = Framework.getService(ConversionService.class);
-            BlobHolder result = conversionService.convert("serialJpegResizer", new SimpleBlobHolder(blob), new HashMap<>());
+            BlobHolder result = conversionService.convert(CONVERTER_NAME, new SimpleBlobHolder(blob), new HashMap<>());
             viewList = buildViews(result.getBlobs());
 
         } finally {
@@ -117,7 +119,7 @@ public class PictureSerialConversionWorker extends AbstractWork {
     }
 
     /**
-     * Fire a {@code PICTURE_VIEWS_GENERATION_DONE_EVENT} event when no other PictureSerialConversionWorker is scheduled
+     * Fire a {@code PICTURE_VIEWS_GENERATION_DONE_EVENT} event when no other PictureMultiConversionWorker is scheduled
      * for this document.
      *
      * @since 5.8

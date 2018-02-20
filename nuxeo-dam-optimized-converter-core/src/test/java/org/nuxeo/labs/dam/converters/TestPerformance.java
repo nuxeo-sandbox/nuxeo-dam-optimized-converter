@@ -29,7 +29,7 @@ import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.picture.PictureViewsGenerationWork;
-import org.nuxeo.labs.dam.converters.workers.PictureSerialConversionWorker;
+import org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -82,7 +82,7 @@ public class TestPerformance {
         System.out.println("Default worker duration(ms): "+durationDefaultWorker);
 
         beginning = System.currentTimeMillis();
-        PictureSerialConversionWorker worker = new PictureSerialConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
+        PictureMultiConversionWorker worker = new PictureMultiConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
         worker.work();
         worker.closeSession();
         end = System.currentTimeMillis();

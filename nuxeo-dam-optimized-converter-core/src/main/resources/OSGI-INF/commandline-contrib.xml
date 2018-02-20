@@ -3,7 +3,7 @@
     <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
 
     <extension point="command" target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent">
-        <command enabled="true" name="serialJpegResizer">
+        <command enabled="true" name="MultiOutputPictureResize">
             <commandLine>convert</commandLine>
             <parameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten #{inputFilePath}[0] -resize "1920x>" -write #{FullHDOutputFilePath} -resize "1280x>" -write #{MediumOutputFilePath} -resize "640x>" -write #{SmallOutputFilePath} -resize "128x>" #{ThumbnailOutputFilePath}</parameterString>
             <winParameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten #{inputFilePath}[0] -resize "1920x>" -write #{FullHDOutputFilePath} -resize "1280x>" -write #{MediumOutputFilePath} -resize "640x>" -write #{SmallOutputFilePath} -resize "128x>" #{ThumbnailOutputFilePath}</winParameterString>

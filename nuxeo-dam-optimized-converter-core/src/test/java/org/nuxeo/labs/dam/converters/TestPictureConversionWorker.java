@@ -28,7 +28,7 @@ import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.labs.dam.converters.workers.PictureSerialConversionWorker;
+import org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -67,7 +67,7 @@ public class TestPictureConversionWorker {
         DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
         picture.setPropertyValue("file:content",new FileBlob(file));
         picture = session.createDocument(picture);
-        PictureSerialConversionWorker worker = new PictureSerialConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
+        PictureMultiConversionWorker worker = new PictureMultiConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
         worker.work();
 
         TransactionHelper.startTransaction();
