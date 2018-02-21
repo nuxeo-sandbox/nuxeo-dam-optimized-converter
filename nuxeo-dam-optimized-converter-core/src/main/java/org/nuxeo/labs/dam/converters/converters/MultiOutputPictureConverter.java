@@ -24,7 +24,7 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
 
     public static final String SOURCE_FILE_PATH_KEY = "inputFilePath";
     public static final String OUT_DIR_PATH_KEY = "outDirPath";
-    public static final String[] OUTPUTS_FILENAME_KEY = {"FullHDOutputFilePath","MediumOutputFilePath","SmallOutputFilePath","ThumbnailOutputFilePath"};
+    public static final String OUTPUTS_KEY = "outputs";
 
     @Override
     protected Map<String, Blob> getCmdBlobParameters(BlobHolder blobHolder, Map<String, Serializable> parameters) throws ConversionException {
@@ -44,7 +44,9 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
             Map<String, String> cmdStringParams = new HashMap<>();
             cmdStringParams.put(OUT_DIR_PATH_KEY, outDirPath.toString());
 
-            for(String targetFileName : OUTPUTS_FILENAME_KEY) {
+            String outputStr = (String) parameters.get(OUTPUTS_KEY);
+            String outputs[] = outputStr.split(",");
+            for(String targetFileName : outputs) {
                 Path targetFilePath = Paths.get(outDirPath.toString(), targetFileName+".jpg");
                 cmdStringParams.put(targetFileName, targetFilePath.toString());
             }

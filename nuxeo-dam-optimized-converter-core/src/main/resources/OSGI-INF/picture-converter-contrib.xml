@@ -5,6 +5,7 @@
         <converter class="org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter" name="MultiOutputPictureResize">
             <parameters>
                 <parameter name="CommandLineName">MultiOutputPictureResize</parameter>
+                <parameter name="outputs">FullHDOutputFilePath,MediumOutputFilePath,SmallOutputFilePath,ThumbnailOutputFilePath</parameter>
             </parameters>
         </converter>
 
