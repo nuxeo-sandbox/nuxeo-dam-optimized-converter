@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import static org.nuxeo.ecm.core.api.CoreSession.ALLOW_VERSION_WRITE;
 import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTURE_INFO_PROPERTY;
 import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter.VIEWS_PROPERTY;
+import static org.nuxeo.labs.dam.converters.listeners.CustomPictureViewsGenerationListener.DISABLE_PICTURE_VIEWS_GENERATION_LISTENER;
 
 public class PictureMultiConversionWorker extends AbstractWork {
 
@@ -107,6 +108,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
         }
         workingDocument.putContextData("disableNotificationService", Boolean.TRUE);
         workingDocument.putContextData("disableAuditLogger", Boolean.TRUE);
+        workingDocument.putContextData(DISABLE_PICTURE_VIEWS_GENERATION_LISTENER, Boolean.TRUE);
         workingDocument.putContextData(VersioningService.DISABLE_AUTO_CHECKOUT, Boolean.TRUE);
         session.saveDocument(workingDocument);
 
