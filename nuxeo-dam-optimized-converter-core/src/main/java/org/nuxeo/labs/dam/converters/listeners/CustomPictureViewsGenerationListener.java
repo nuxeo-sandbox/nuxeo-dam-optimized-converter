@@ -55,7 +55,7 @@ public class CustomPictureViewsGenerationListener implements EventListener {
 
         DocumentEventContext docCtx = (DocumentEventContext) ctx;
         DocumentModel doc = docCtx.getSourceDocument();
-        if (doc.hasFacet(PICTURE_FACET) && !doc.isProxy()) {
+        if (doc.hasFacet(PICTURE_FACET) && !doc.isVersion() && !doc.isProxy()) {
             PictureMultiConversionWorker work = new PictureMultiConversionWorker(doc.getRepositoryName(), doc.getId(),
                     "file:content");
             WorkManager workManager = Framework.getService(WorkManager.class);
