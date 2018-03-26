@@ -47,7 +47,7 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
             String outputStr = initParameters.get(OUTPUTS_KEY);
             String outputs[] = outputStr.split(",");
             for(String targetFileName : outputs) {
-                Path targetFilePath = Paths.get(outDirPath.toString(), targetFileName+".jpg");
+                Path targetFilePath = Paths.get(outDirPath.toString(), targetFileName);
                 cmdStringParams.put(targetFileName, targetFilePath.toString());
             }
 
