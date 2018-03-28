@@ -28,6 +28,7 @@ import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.ecm.platform.picture.api.PictureView;
 import org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -76,6 +77,13 @@ public class TestPictureConversionWorker {
         List<Map<String, Serializable>> views = (List<Map<String, Serializable>>) picture.getPropertyValue(VIEWS_PROPERTY);
         Assert.assertNotNull(views);
         Assert.assertEquals(4,views.size());
+
+        Map<String, Serializable> thumbnail = views.get(0);
+        Assert.assertEquals("Thumbnail",thumbnail.get("title"));
+
+        Map<String, Serializable> fullhd = views.get(3);
+        Assert.assertEquals("FullHD",fullhd.get("title"));
+
 
     }
 

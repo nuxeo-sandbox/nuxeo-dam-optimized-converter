@@ -18,10 +18,7 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.nuxeo.ecm.core.api.CoreSession.ALLOW_VERSION_WRITE;
@@ -175,6 +172,9 @@ public class PictureMultiConversionWorker extends AbstractWork {
             view.setImageInfo(imageInfo);
             pictureViews.add(view);
         }
+
+        //sort views
+        Collections.sort(pictureViews, Comparator.comparingInt(PictureView::getHeight));
 
         return pictureViews;
     }
