@@ -170,6 +170,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
             view.setWidth(imageInfo.getWidth());
             view.setDescription(conversion.getDescription());
             view.setImageInfo(imageInfo);
+            view.setFilename(blob.getFilename());
             pictureViews.add(view);
         }
 
