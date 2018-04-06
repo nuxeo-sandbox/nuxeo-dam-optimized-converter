@@ -19,6 +19,7 @@
 package org.nuxeo.labs.dam.converters;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
@@ -54,11 +55,13 @@ import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter
         "org.nuxeo.ecm.platform.picture.core",
         "org.nuxeo.ecm.platform.picture.convert",
         "org.nuxeo.ecm.platform.tag",
-        "org.nuxeo.ecm.actions"
+        "org.nuxeo.ecm.actions",
+        "org.nuxeo.binary.metadata"
 })
 @LocalDeploy({
         "nuxeo-dam-optimized-converter-core:disable-default-picture-generation-contrib.xml"
 })
+@Ignore
 public class TestPerformance {
 
     @Inject

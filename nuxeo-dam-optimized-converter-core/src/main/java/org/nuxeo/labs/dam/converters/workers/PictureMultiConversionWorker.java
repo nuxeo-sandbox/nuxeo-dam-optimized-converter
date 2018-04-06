@@ -1,8 +1,10 @@
 package org.nuxeo.labs.dam.converters.workers;
 
+import org.nuxeo.binary.metadata.api.BinaryMetadataService;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.api.model.Property;
@@ -35,6 +37,8 @@ public class PictureMultiConversionWorker extends AbstractWork {
     public static final String PICTURE_VIEWS_GENERATION_DONE_EVENT = "pictureViewsGenerationDone";
 
     public static final String CONVERTER_NAME = "MultiOutputPictureResize";
+
+    public static final int BILLION = 1000 * 1000 * 1000;
 
     protected final String xpath;
 
@@ -77,20 +81,50 @@ public class PictureMultiConversionWorker extends AbstractWork {
 
         setStatus("Running conversions");
 
-        List<PictureView> viewList;
-        ImageInfo imageInfo = null;
+        ImageInfo imageInfo;
+        BlobHolder result = null;
 
         try {
-            ImagingService imagingService = Framework.getService(ImagingService.class);
-            imageInfo = imagingService.getImageInfo(blob);
-            ConversionService conversionService = Framework.getService(ConversionService.class);
-            BlobHolder result = conversionService.convert(CONVERTER_NAME, new SimpleBlobHolder(blob), new HashMap<>());
-            viewList = buildViews(result.getBlobs());
-
+            imageInfo = getImageInfo(blob);
+            if (imageInfo.getWidth() * imageInfo.getHeight() > BILLION) {
+                BigPictureMultiConversionWorker worker =
+                        new BigPictureMultiConversionWorker(this.repositoryName,this.docId,this.xpath);
+                WorkManager wm = Framework.getService(WorkManager.class);
+                wm.schedule(worker);
+            } else {
+                ConversionService conversionService = Framework.getService(ConversionService.class);
+                result = conversionService.convert(CONVERTER_NAME, new SimpleBlobHolder(blob), new HashMap<>());
+            }
+        } catch (Exception e) {
+            throw new NuxeoException(e);
         } finally {
             TransactionHelper.startTransaction();
         }
 
+        if (result != null) {
+            updateDocument(imageInfo, result, workingDocument);
+        }
+
+        TransactionHelper.commitOrRollbackTransaction();
+        closeSession();
+
+        setStatus("Done");
+    }
+
+    protected ImageInfo getImageInfo(Blob blob) {
+        BinaryMetadataService service = Framework.getService(BinaryMetadataService.class);
+        Map<String, Object> metadata = service.readMetadata(blob, true);
+        Map<String,Serializable> info = new HashMap<>();
+        info.put(ImageInfo.WIDTH, Long.valueOf(metadata.get("ImageWidth").toString()));
+        info.put(ImageInfo.HEIGHT, Long.valueOf(metadata.get("ImageHeight").toString()));
+        info.put(ImageInfo.COLOR_SPACE, (Serializable) metadata.get("ColorMode"));
+        info.put(ImageInfo.DEPTH, Long.valueOf(metadata.get("BitsPerSample").toString()));
+        info.put(ImageInfo.FORMAT, (Serializable) metadata.get("FileType"));
+        return ImageInfo.fromMap(info);
+    }
+
+    protected void updateDocument(ImageInfo imageInfo, BlobHolder result, DocumentModel workingDocument) {
+        List<PictureView> viewList = buildViews(result.getBlobs());
         List<Map<String, Serializable>> views = new ArrayList<>();
         for (PictureView pictureView : viewList) {
             views.add(pictureView.asMap());
@@ -110,34 +144,6 @@ public class PictureMultiConversionWorker extends AbstractWork {
         session.saveDocument(workingDocument);
 
         firePictureViewsGenerationDoneEvent(workingDocument);
-
-        TransactionHelper.commitOrRollbackTransaction();
-        closeSession();
-
-        setStatus("Done");
-    }
-
-    /**
-     * Fire a {@code PICTURE_VIEWS_GENERATION_DONE_EVENT} event when no other PictureMultiConversionWorker is scheduled
-     * for this document.
-     *
-     * @since 5.8
-     */
-    protected void firePictureViewsGenerationDoneEvent(DocumentModel doc) {
-        WorkManager workManager = Framework.getService(WorkManager.class);
-        List<String> workIds = workManager.listWorkIds(CATEGORY_PICTURE_GENERATION, null);
-        int worksCount = 0;
-        for (String workId : workIds) {
-            if (workId.equals(getId())) {
-                if (++worksCount > 1) {
-                    // another work scheduled
-                    return;
-                }
-            }
-        }
-        DocumentEventContext ctx = new DocumentEventContext(session, session.getPrincipal(), doc);
-        Event event = ctx.newEvent(PICTURE_VIEWS_GENERATION_DONE_EVENT);
-        Framework.getService(EventService.class).fireEvent(event);
     }
 
 
@@ -150,13 +156,13 @@ public class PictureMultiConversionWorker extends AbstractWork {
         Map<String, PictureConversion> conversionMap = conversionList.stream().collect(
                 Collectors.toMap(x -> x.getId(), x -> x));
 
-        for(Blob blob:blobs) {
+        for (Blob blob : blobs) {
             String filename = blob.getFilename();
             int index = filename.indexOf("Output");
-            if (index<=0) {
+            if (index <= 0) {
                 continue;
             }
-            String id = filename.substring(0,index);
+            String id = filename.substring(0, index);
             PictureConversion conversion = conversionMap.get(id);
             if (conversion == null) {
                 continue;
@@ -176,8 +182,25 @@ public class PictureMultiConversionWorker extends AbstractWork {
 
         //sort views
         Collections.sort(pictureViews, Comparator.comparingInt(PictureView::getHeight));
-
         return pictureViews;
+    }
+
+
+    protected void firePictureViewsGenerationDoneEvent(DocumentModel doc) {
+        WorkManager workManager = Framework.getService(WorkManager.class);
+        List<String> workIds = workManager.listWorkIds(CATEGORY_PICTURE_GENERATION, null);
+        int worksCount = 0;
+        for (String workId : workIds) {
+            if (workId.equals(getId())) {
+                if (++worksCount > 1) {
+                    // another work scheduled
+                    return;
+                }
+            }
+        }
+        DocumentEventContext ctx = new DocumentEventContext(session, session.getPrincipal(), doc);
+        Event event = ctx.newEvent(PICTURE_VIEWS_GENERATION_DONE_EVENT);
+        Framework.getService(EventService.class).fireEvent(event);
     }
 
 }

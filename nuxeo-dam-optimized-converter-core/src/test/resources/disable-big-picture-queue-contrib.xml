@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="disable-big-picture-conversions">
+    <require>org.nuxeo.ecm.platform.picture.workmanager</require>
+
+    <extension target="org.nuxeo.ecm.core.work.service" point="queues">
+        <queue id="bigPictureViewsGeneration" processing="false">
+            <maxThreads>1</maxThreads>
+            <category>bigPictureViewsGeneration</category>
+        </queue>
+    </extension>
+
+</component>

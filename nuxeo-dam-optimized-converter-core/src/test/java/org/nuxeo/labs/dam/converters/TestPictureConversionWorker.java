@@ -28,7 +28,8 @@ import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.ecm.platform.picture.api.PictureView;
+import org.nuxeo.ecm.core.work.api.WorkManager;
+import org.nuxeo.labs.dam.converters.workers.BigPictureMultiConversionWorker;
 import org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -52,18 +53,23 @@ import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter
         "org.nuxeo.ecm.platform.picture.api",
         "org.nuxeo.ecm.platform.picture.core",
         "org.nuxeo.ecm.platform.picture.convert",
-        "org.nuxeo.ecm.platform.tag"
+        "org.nuxeo.ecm.platform.tag",
+        "org.nuxeo.binary.metadata"
 })
 @LocalDeploy({
-        "nuxeo-dam-optimized-converter-core:disable-default-picture-generation-contrib.xml"
+        "nuxeo-dam-optimized-converter-core:disable-default-picture-generation-contrib.xml",
+        "nuxeo-dam-optimized-converter-core:disable-big-picture-queue-contrib.xml",
 })
 public class TestPictureConversionWorker {
 
     @Inject
     CoreSession session;
 
+    @Inject
+    WorkManager wm;
+
     @Test
-    public void testWorker() {
+    public void testRegularWorkerWithSmallFile() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
         DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
         picture.setPropertyValue("file:content",new FileBlob(file));
@@ -83,8 +89,49 @@ public class TestPictureConversionWorker {
 
         Map<String, Serializable> fullhd = views.get(3);
         Assert.assertEquals("FullHD",fullhd.get("title"));
-
-
     }
+
+    @Test
+    public void testRegularWorkerWithBigFile() {
+        File file = new File(getClass().getResource("/files/big.jpg").getPath());
+        DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
+        picture.setPropertyValue("file:content",new FileBlob(file));
+        picture = session.createDocument(picture);
+        PictureMultiConversionWorker worker = new PictureMultiConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
+        worker.work();
+        Assert.assertEquals(wm.listWork(BigPictureMultiConversionWorker.CATEGORY,null).size(),1);
+    }
+
+    @Test
+    @LocalDeploy({
+            "nuxeo-dam-optimized-converter-core:mock-picture-converter-contrib.xml"
+    })
+    public void testBigWorkerWithBigFile() {
+        File file = new File(getClass().getResource("/files/big.jpg").getPath());
+        DocumentModel picture = session.createDocumentModel(
+                session.getRootDocument().getPathAsString(),
+                "picture",
+                "Picture");
+        picture.setPropertyValue("file:content",new FileBlob(file));
+        picture = session.createDocument(picture);
+        BigPictureMultiConversionWorker worker =
+                new BigPictureMultiConversionWorker(
+                        picture.getRepositoryName(),
+                        picture.getId(),
+                        "file:content");
+        worker.work();
+
+        TransactionHelper.startTransaction();
+
+        picture = session.getDocument(picture.getRef());
+        List<Map<String, Serializable>> views =
+                (List<Map<String, Serializable>>) picture.getPropertyValue(VIEWS_PROPERTY);
+        Assert.assertNotNull(views);
+        Assert.assertEquals(1,views.size());
+        Map<String, Serializable> thumbnail = views.get(0);
+        Assert.assertEquals("Small",thumbnail.get("title"));
+    }
+
+
 
 }
