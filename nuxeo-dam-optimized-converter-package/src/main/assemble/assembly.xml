@@ -30,6 +30,7 @@
     <!-- Base distribution NXR -->
     <copy todir="${outdir}">
       <artifact:file key="org.nuxeo.ecm.distribution:nuxeo-nxr-server::zip" />
+      <artifact:file key="org.nuxeo.marketplace.dam:marketplace::zip:nxr-server" />
     </copy>
 
     <!-- Nuxeo bundles -->
@@ -68,9 +69,17 @@
       </artifact:set>
     </copy>
     <nx:rmdups dir="${outdir}/nxr/lib"/>
-    <!-- Temporary ZIP Nuxeo NXR to compare with base distribution NXR -->
-    <zip destfile="${outdir}/nxr-${maven.project.version}.zip" basedir="${outdir}/nxr"/>
+
     <!-- Optionally attach the NXR for later use by other modules -->
+    <unzip src="${outdir}/nuxeo-nxr-server-${nuxeo.distribution.version}.zip"
+           dest="${outdir}/nuxeo-nxr-all" />
+    <unzip src="${outdir}/marketplace-${nuxeo.dam.nxr.version}-nxr-server.zip"
+           dest="${outdir}/nuxeo-nxr-all" />
+    <zip destfile="${outdir}/nuxeo-nxr-server-${nuxeo.distribution.version}.zip"
+         basedir="${outdir}/nuxeo-nxr-all" />
+
+    <zip destfile="${outdir}/nxr-${maven.project.version}.zip" basedir="${outdir}/nxr"/>
+
     <artifact:attach file="${outdir}/nxr-${maven.project.version}.zip" classifier="nxr" type="zip"/>
 
     <!-- Your MP only needs to include files not already provided by the base distribution -->
