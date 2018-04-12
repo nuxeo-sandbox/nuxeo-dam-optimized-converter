@@ -92,6 +92,9 @@ public class TestPictureConversionWorker {
     }
 
     @Test
+    @LocalDeploy({
+            "nuxeo-dam-optimized-converter-core:mock-picture-converter-contrib.xml"
+    })
     public void testRegularWorkerWithBigFile() {
         File file = new File(getClass().getResource("/files/big.jpg").getPath());
         DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
@@ -131,7 +134,5 @@ public class TestPictureConversionWorker {
         Map<String, Serializable> thumbnail = views.get(0);
         Assert.assertEquals("Small",thumbnail.get("title"));
     }
-
-
 
 }
