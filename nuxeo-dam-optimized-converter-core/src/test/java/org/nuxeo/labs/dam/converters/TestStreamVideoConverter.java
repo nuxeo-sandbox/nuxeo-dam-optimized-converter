@@ -139,7 +139,7 @@ public class TestStreamVideoConverter {
     protected Blob getRemoteBlob() throws IOException {
         BlobProvider myProvider = blobManager.getBlobProvider("mockprovider");
         BlobInfo blobInfo = new BlobInfo();
-        blobInfo.key = "mockprovider:https://github.com/nuxeo-sandbox/nuxeo-video-mediainfo-mapper/raw/master/nuxeo-video-mediainfo-mapper-core/src/test/resources/files/nuxeo.3gp";
+        blobInfo.key = "mockprovider:https://github.com/nuxeo-sandbox/nuxeo-dam-optimized-converter/raw/master/nuxeo-dam-optimized-converter-core/src/test/resources/files/nuxeo.3gp";
         blobInfo.mimeType = "video/mp4";
         blobInfo.filename = "nuxeo.3gp";
         blobInfo.length = 3563674l;
