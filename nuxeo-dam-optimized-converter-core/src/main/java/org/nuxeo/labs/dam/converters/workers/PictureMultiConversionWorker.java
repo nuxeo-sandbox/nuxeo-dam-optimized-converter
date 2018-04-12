@@ -115,12 +115,30 @@ public class PictureMultiConversionWorker extends AbstractWork {
         BinaryMetadataService service = Framework.getService(BinaryMetadataService.class);
         Map<String, Object> metadata = service.readMetadata(blob, true);
         Map<String,Serializable> info = new HashMap<>();
-        info.put(ImageInfo.WIDTH, Long.valueOf(metadata.get("ImageWidth").toString()));
-        info.put(ImageInfo.HEIGHT, Long.valueOf(metadata.get("ImageHeight").toString()));
+        info.put(ImageInfo.WIDTH, getLongValue(metadata.get("ImageWidth")));
+        info.put(ImageInfo.HEIGHT, getLongValue(metadata.get("ImageHeight")));
         info.put(ImageInfo.COLOR_SPACE, (Serializable) metadata.get("ColorMode"));
-        info.put(ImageInfo.DEPTH, Long.valueOf(metadata.get("BitsPerSample").toString()));
         info.put(ImageInfo.FORMAT, (Serializable) metadata.get("FileType"));
+
+        Object bitDepth = metadata.get("BitDepth");
+        if (bitDepth != null) {
+            info.put(ImageInfo.DEPTH, getLongValue(bitDepth));
+        } else {
+            Object bitsPerSample = metadata.get("BitsPerSample");
+            if (bitsPerSample != null) {
+                info.put(ImageInfo.DEPTH, getLongValue(bitsPerSample));
+            }
+        }
         return ImageInfo.fromMap(info);
+    }
+
+
+    protected Long getLongValue(Object object) {
+        if (object instanceof Integer) {
+            return Long.valueOf(object.toString());
+        } else {
+            return null;
+        }
     }
 
     protected void updateDocument(ImageInfo imageInfo, BlobHolder result, DocumentModel workingDocument) {
