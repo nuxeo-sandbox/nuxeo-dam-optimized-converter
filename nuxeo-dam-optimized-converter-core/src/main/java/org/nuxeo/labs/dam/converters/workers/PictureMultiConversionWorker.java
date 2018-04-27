@@ -38,7 +38,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
 
     public static final String CONVERTER_NAME = "MultiOutputPictureResize";
 
-    public static final int BILLION = 1000 * 1000 * 1000;
+    public static final long BILLION = 1_000_000_000;
 
     protected final String xpath;
 
@@ -86,7 +86,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
 
         try {
             imageInfo = getImageInfo(blob);
-            if (imageInfo.getWidth() * imageInfo.getHeight() > BILLION) {
+            if ((long) imageInfo.getWidth() * (long) imageInfo.getHeight() > BILLION) {
                 BigPictureMultiConversionWorker worker =
                         new BigPictureMultiConversionWorker(this.repositoryName,this.docId,this.xpath);
                 WorkManager wm = Framework.getService(WorkManager.class);
