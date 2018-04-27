@@ -15,7 +15,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <nuxeo.dam.nxr.version>6.4.0</nuxeo.dam.nxr.version>
+    <nuxeo.dam.nxr.version>6.4.1-SNAPSHOT</nuxeo.dam.nxr.version>
   </properties>
 
   <modules>
