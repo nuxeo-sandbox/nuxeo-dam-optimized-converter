@@ -86,7 +86,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
 
         try {
             imageInfo = getImageInfo(blob);
-            if ((long) imageInfo.getWidth() * (long) imageInfo.getHeight() > BILLION) {
+            if (isBigImageFile(imageInfo,blob)) {
                 BigPictureMultiConversionWorker worker =
                         new BigPictureMultiConversionWorker(this.repositoryName,this.docId,this.xpath);
                 WorkManager wm = Framework.getService(WorkManager.class);
@@ -96,7 +96,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
                 result = conversionService.convert(CONVERTER_NAME, new SimpleBlobHolder(blob), new HashMap<>());
             }
         } catch (Exception e) {
-            throw new NuxeoException(e);
+            throw new NuxeoException("Could not transcode image file in "+workingDocument.getPath(),e);
         } finally {
             TransactionHelper.startTransaction();
         }
@@ -140,6 +140,12 @@ public class PictureMultiConversionWorker extends AbstractWork {
             return null;
         }
     }
+
+
+    protected boolean isBigImageFile(ImageInfo imageInfo,Blob blob) {
+        return ((long)imageInfo.getWidth() * (long)imageInfo.getHeight()) > BILLION;
+    }
+
 
     protected void updateDocument(ImageInfo imageInfo, BlobHolder result, DocumentModel workingDocument) {
         List<PictureView> viewList = buildViews(result.getBlobs());
