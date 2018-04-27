@@ -34,7 +34,6 @@ import org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.test.runner.LocalDeploy;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
 import javax.inject.Inject;
@@ -58,7 +57,7 @@ import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter
         "org.nuxeo.ecm.actions",
         "org.nuxeo.binary.metadata"
 })
-@LocalDeploy({
+@Deploy({
         "nuxeo-dam-optimized-converter-core:disable-default-picture-generation-contrib.xml"
 })
 @Ignore

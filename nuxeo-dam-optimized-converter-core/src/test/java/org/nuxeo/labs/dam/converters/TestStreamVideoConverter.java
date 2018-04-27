@@ -38,7 +38,6 @@ import org.nuxeo.ecm.platform.video.VideoInfo;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-import org.nuxeo.runtime.test.runner.LocalDeploy;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -59,7 +58,7 @@ import static org.junit.Assert.assertTrue;
         "org.nuxeo.ecm.platform.video.core",
         "org.nuxeo.ecm.platform.video.convert",
 })
-@LocalDeploy({
+@Deploy({
         "nuxeo-dam-optimized-converter-core:mock-blobprovider-conrib.xml"
 })
 public class TestStreamVideoConverter {
