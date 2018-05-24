@@ -53,9 +53,7 @@ import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter
         "org.nuxeo.ecm.platform.picture.core",
         "org.nuxeo.ecm.platform.picture.convert",
         "org.nuxeo.ecm.platform.tag",
-        "org.nuxeo.binary.metadata"
-})
-@Deploy({
+        "org.nuxeo.binary.metadata",
         "nuxeo-dam-optimized-converter-core:disable-default-picture-generation-contrib.xml",
         "nuxeo-dam-optimized-converter-core:disable-big-picture-queue-contrib.xml",
 })

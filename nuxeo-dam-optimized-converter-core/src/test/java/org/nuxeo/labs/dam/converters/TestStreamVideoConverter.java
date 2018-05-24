@@ -57,8 +57,6 @@ import static org.junit.Assert.assertTrue;
         "org.nuxeo.ecm.platform.video.api",
         "org.nuxeo.ecm.platform.video.core",
         "org.nuxeo.ecm.platform.video.convert",
-})
-@Deploy({
         "nuxeo-dam-optimized-converter-core:mock-blobprovider-conrib.xml"
 })
 public class TestStreamVideoConverter {
