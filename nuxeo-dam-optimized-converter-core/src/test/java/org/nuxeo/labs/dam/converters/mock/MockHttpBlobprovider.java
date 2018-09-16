@@ -10,6 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
 import java.util.Map;
 
 public class MockHttpBlobprovider implements BlobProvider {
@@ -37,6 +38,11 @@ public class MockHttpBlobprovider implements BlobProvider {
     @Override
     public boolean supportsUserUpdate() {
         return false;
+    }
+
+    @Override
+    public Map<String, String> getProperties() {
+        return Collections.emptyMap();
     }
 
     @Override
