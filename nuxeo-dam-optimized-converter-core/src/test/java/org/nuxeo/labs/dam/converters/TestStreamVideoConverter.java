@@ -145,6 +145,6 @@ public class TestStreamVideoConverter {
 
     protected Blob getLocalBlob() {
         File file = new File(getClass().getResource("/files/nuxeo.3gp").getPath());
-        return new FileBlob(file);
+        return new FileBlob(file,"video/3gp");
     }
 }

@@ -59,11 +59,11 @@ public class TestMultiOutputPictureConverter {
     @Test
     public void testConverter() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
-        BlobHolder result = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
+        BlobHolder result = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file,"image/jpeg")),new HashMap<>());
         Assert.assertEquals(4,result.getBlobs().size());
 
         //test conversions are cached correctly
-        BlobHolder result2 = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file)),new HashMap<>());
+        BlobHolder result2 = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file,"image/jpeg")),new HashMap<>());
         Assert.assertEquals(4,result2.getBlobs().size());
     }
 

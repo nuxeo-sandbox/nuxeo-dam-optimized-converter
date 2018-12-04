@@ -17,7 +17,7 @@
   <supported>false</supported>
   <platforms>
     <platform>server-@DISTRIB_VERSION@</platform>
-    <platform>server-@DISTRIB_VERSION@-HF*</platform>
+    <!--platform>server-@DISTRIB_VERSION@-HF*</platform-->
   </platforms>
   <!-- Dependencies on other packages -->
   <dependencies>

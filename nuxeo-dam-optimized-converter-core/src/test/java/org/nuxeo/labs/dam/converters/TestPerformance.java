@@ -68,7 +68,7 @@ public class TestPerformance {
     public void testPerfomanceWorker() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
         DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
-        picture.setPropertyValue("file:content",new FileBlob(file));
+        picture.setPropertyValue("file:content",new FileBlob(file,"image/jpeg"));
         picture = session.createDocument(picture);
 
         //test default worker

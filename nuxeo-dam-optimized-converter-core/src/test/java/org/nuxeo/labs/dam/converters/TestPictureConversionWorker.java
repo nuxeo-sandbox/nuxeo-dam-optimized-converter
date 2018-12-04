@@ -69,7 +69,7 @@ public class TestPictureConversionWorker {
     public void testRegularWorkerWithSmallFile() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
         DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
-        picture.setPropertyValue("file:content",new FileBlob(file));
+        picture.setPropertyValue("file:content",new FileBlob(file,"image/jpeg"));
         picture = session.createDocument(picture);
         PictureMultiConversionWorker worker = new PictureMultiConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
         worker.work();
@@ -95,7 +95,7 @@ public class TestPictureConversionWorker {
     public void testRegularWorkerWithBigFile() {
         File file = new File(getClass().getResource("/files/big.jpg").getPath());
         DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
-        picture.setPropertyValue("file:content",new FileBlob(file));
+        picture.setPropertyValue("file:content",new FileBlob(file,"image/jpeg"));
         picture = session.createDocument(picture);
         PictureMultiConversionWorker worker = new PictureMultiConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
         worker.work();
@@ -112,7 +112,7 @@ public class TestPictureConversionWorker {
                 session.getRootDocument().getPathAsString(),
                 "picture",
                 "Picture");
-        picture.setPropertyValue("file:content",new FileBlob(file));
+        picture.setPropertyValue("file:content",new FileBlob(file,"image/jpeg"));
         picture = session.createDocument(picture);
         BigPictureMultiConversionWorker worker =
                 new BigPictureMultiConversionWorker(

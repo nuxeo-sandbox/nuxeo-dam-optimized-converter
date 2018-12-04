@@ -3,6 +3,12 @@
     <extension point="converter" target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl">
 
         <converter class="org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter" name="MultiOutputPictureResize">
+            <sourceMimeType>image/*</sourceMimeType>
+            <sourceMimeType>application/photoshop</sourceMimeType>
+            <sourceMimeType>application/illustrator</sourceMimeType>
+            <sourceMimeType>application/postscript</sourceMimeType>
+            <destinationMimeType>image/jpeg</destinationMimeType>
+            <destinationMimeType>image/png</destinationMimeType>
             <parameters>
                 <parameter name="CommandLineName">MultiOutputPictureResize</parameter>
                 <parameter name="outputs">FullHDOutputFilePath,MediumOutputFilePath,SmallOutputFilePath,ThumbnailOutputFilePath</parameter>
