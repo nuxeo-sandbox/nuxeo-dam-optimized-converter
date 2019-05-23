@@ -1,10 +1,10 @@
 <!-- See documentation at http://doc.nuxeo.com/x/HgIz -->
 <package type="addon" name="nuxeo-dam-optimized-converter-package" version="@VERSION@">
-  <title>Nuxeo dam optimized converter package</title>
+  <title>Nuxeo Optimized Image/Video Converter</title>
   <description>
-    <p>Put here an HTML description of your Nuxeo Package.</p>
+    <p>Image and Video converters optimized for large media files</p>
   </description>
-  <!-- <home-page>http://doc.nuxeo.com/</home-page> -->
+  <home-page>https://github.com/nuxeo-sandbox/nuxeo-dam-optimized-converter</home-page>
   <vendor></vendor>
   <installer restart="true" />
   <uninstaller restart="true" />
@@ -14,7 +14,6 @@
   <nuxeo-validation>none</nuxeo-validation>
   <!-- Production State: production_ready | testing | proto -->
   <production-state>testing</production-state>
-  <supported>false</supported>
   <platforms>
     <platform>server-@DISTRIB_VERSION@</platform>
     <!--platform>server-@DISTRIB_VERSION@-HF*</platform-->
@@ -38,5 +37,5 @@
   <license>Apache License, Version 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
   <!-- Visibility: PRIVATE | MARKETPLACE | DEV | PUBLIC -->
-  <visibility>DEV</visibility>
+  <visibility>PUBLIC</visibility>
 </package>
