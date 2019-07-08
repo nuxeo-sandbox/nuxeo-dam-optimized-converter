@@ -89,6 +89,24 @@ public class TestPictureConversionWorker {
     }
 
     @Test
+    public void testRegularWorkerWithSVGfile() {
+        File file = new File(getClass().getResource("/files/curvex.svg").getPath());
+        DocumentModel picture = session.createDocumentModel(session.getRootDocument().getPathAsString(),"picture","Picture");
+        picture.setPropertyValue("file:content",new FileBlob(file,"image/svg+xml"));
+        picture = session.createDocument(picture);
+        PictureMultiConversionWorker worker = new PictureMultiConversionWorker(picture.getRepositoryName(),picture.getId(),"file:content");
+        worker.work();
+
+        TransactionHelper.startTransaction();
+
+        picture = session.getDocument(picture.getRef());
+        List<Map<String, Serializable>> views = (List<Map<String, Serializable>>) picture.getPropertyValue(VIEWS_PROPERTY);
+        Assert.assertNotNull(views);
+        Assert.assertEquals(4,views.size());
+    }
+
+
+    @Test
     @Deploy({
             "nuxeo-dam-optimized-converter-core:mock-picture-converter-contrib.xml"
     })

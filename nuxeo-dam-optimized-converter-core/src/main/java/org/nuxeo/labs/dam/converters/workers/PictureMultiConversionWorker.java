@@ -112,24 +112,29 @@ public class PictureMultiConversionWorker extends AbstractWork {
     }
 
     protected ImageInfo getImageInfo(Blob blob) {
-        BinaryMetadataService service = Framework.getService(BinaryMetadataService.class);
-        Map<String, Object> metadata = service.readMetadata(blob, true);
-        Map<String,Serializable> info = new HashMap<>();
-        info.put(ImageInfo.WIDTH, getLongValue(metadata.get("ImageWidth")));
-        info.put(ImageInfo.HEIGHT, getLongValue(metadata.get("ImageHeight")));
-        info.put(ImageInfo.COLOR_SPACE, (Serializable) metadata.get("ColorMode"));
-        info.put(ImageInfo.FORMAT, (Serializable) metadata.get("FileType"));
+        try {
+            BinaryMetadataService service = Framework.getService(BinaryMetadataService.class);
+            Map<String, Object> metadata = service.readMetadata(blob, true);
+            Map<String,Serializable> info = new HashMap<>();
+            info.put(ImageInfo.WIDTH, getLongValue(metadata.get("ImageWidth")));
+            info.put(ImageInfo.HEIGHT, getLongValue(metadata.get("ImageHeight")));
+            info.put(ImageInfo.COLOR_SPACE, (Serializable) metadata.get("ColorMode"));
+            info.put(ImageInfo.FORMAT, (Serializable) metadata.get("FileType"));
 
-        Object bitDepth = metadata.get("BitDepth");
-        if (bitDepth != null) {
-            info.put(ImageInfo.DEPTH, getLongValue(bitDepth));
-        } else {
-            Object bitsPerSample = metadata.get("BitsPerSample");
-            if (bitsPerSample != null) {
-                info.put(ImageInfo.DEPTH, getLongValue(bitsPerSample));
+            Object bitDepth = metadata.get("BitDepth");
+            if (bitDepth != null) {
+                info.put(ImageInfo.DEPTH, getLongValue(bitDepth));
+            } else {
+                Object bitsPerSample = metadata.get("BitsPerSample");
+                if (bitsPerSample != null) {
+                    info.put(ImageInfo.DEPTH, getLongValue(bitsPerSample));
+                }
             }
+            return ImageInfo.fromMap(info);
+        } catch (NuxeoException e) {
+            ImagingService is = Framework.getService(ImagingService.class);
+            return is.getImageInfo(blob);
         }
-        return ImageInfo.fromMap(info);
     }
 
 
