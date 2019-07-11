@@ -21,25 +21,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * WARNING: NAMING CONVENTION: The prefix defines the name of picture:view (we remove a "_" at the end, if any)
+ * 
+ * Also because of misc. usage in the platform, try to keep the original names (FullHD, Small, Medium and Thumbnail)
+ * and to make sure you have Thumbnail at element [0] and Full hd at [4]...
+ */
 public class MultiOutputPictureConverter extends CommandLineBasedConverter {
 
     public static final String SOURCE_FILE_PATH_KEY = "inputFilePath";
+
     public static final String OUT_DIR_PATH_KEY = "outDirPath";
+
     public static final String OUTPUTS_KEY = "outputs";
+
     public static final String OUTPUTS_RESIZES_NAMES_KEY = "outputsResizesNames";
+
     public static final String OUTPUTS_RESIZES_KEY = "outputsResizes";
+
     public static final String OUTPUTS_EXTENSIONS_KEY = "outputsExtensions";
-    public static final String OUTPUTS_PREFIXES_KEY = "outputsPrefix";
+
+    public static final String OUTPUTS_PREFIXES_KEY = "outputsPrefixes";
+
+    public static final String VIEWS_DESCRIPTIONS_KEY = "viewsDescriptions";
 
     @Override
-    protected Map<String, Blob> getCmdBlobParameters(BlobHolder blobHolder, Map<String, Serializable> parameters) throws ConversionException {
+    protected Map<String, Blob> getCmdBlobParameters(BlobHolder blobHolder, Map<String, Serializable> parameters)
+            throws ConversionException {
         Map<String, Blob> cmdBlobParams = new HashMap<>();
         cmdBlobParams.put(SOURCE_FILE_PATH_KEY, blobHolder.getBlob());
         return cmdBlobParams;
     }
 
     @Override
-    protected Map<String, String> getCmdStringParameters(BlobHolder blobHolder, Map<String, Serializable> parameters) throws ConversionException {
+    protected Map<String, String> getCmdStringParameters(BlobHolder blobHolder, Map<String, Serializable> parameters)
+            throws ConversionException {
         String tmpDir = getTmpDirectory(parameters);
         Path tmpDirPath = tmpDir != null ? Paths.get(tmpDir) : null;
         try {
@@ -54,13 +70,13 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
             String outPutsResizes[] = initParameters.get(OUTPUTS_RESIZES_KEY).split(",");
             String outPutsExtensions[] = initParameters.get(OUTPUTS_EXTENSIONS_KEY).split(",");
             String outPutsPrefixes[] = initParameters.get(OUTPUTS_PREFIXES_KEY).split(",");
-            
+
             String sourceFileName = blobHolder.getBlob().getFilename();
             sourceFileName = FilenameUtils.removeExtension(sourceFileName);
-            
+
             // We must assume all our arrays have the same size
             String targetFileName;
-            for(int i = 0; i < outputs.length; i++) {
+            for (int i = 0; i < outputs.length; i++) {
                 targetFileName = outPutsPrefixes[i] + sourceFileName + outPutsExtensions[i];
                 Path targetFilePath = Paths.get(outDirPath.toString(), targetFileName);
                 cmdStringParams.put(outputs[i], targetFilePath.toString());

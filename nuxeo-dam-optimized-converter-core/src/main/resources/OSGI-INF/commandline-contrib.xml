@@ -2,6 +2,7 @@
 
     <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
 
+	<!-- WARNING: There is tight relation with picture-converter-contrib.xml. The name of some variables used here are declared in icture-converter-contrib.xml -->
     <extension point="command" target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent">
         <command enabled="true" name="MultiOutputPictureResize">
             <commandLine>convert</commandLine>

@@ -2,6 +2,10 @@
     <require>org.nuxeo.labs.dam.converters.commandline</require>
     <extension point="converter" target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl">
 
+		<!-- WARNING: There is tight relation with commandline.converter.xml: Some values declared here are used in commandline.converter.xml -->
+		<!--  Also, some parameters of this converter are used to fill some field of picture:views
+		      This is not the best practice. A whole serviice confi. should be done instead
+		      (since these parameters are of no use for the conversion, stricto sensu)  -->
         <converter class="org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter" name="MultiOutputPictureResize">
             <sourceMimeType>image/*</sourceMimeType>
             <sourceMimeType>application/photoshop</sourceMimeType>
@@ -20,7 +24,11 @@
                 <!--  Exact same order as "outputs" -->
                 <parameter name="outputsExtensions">.jpeg,.jpeg,.jpeg,.jpeg</parameter>
                 <!--  Exact same order as "outputs" -->
-                <parameter name="outputsPrefix">FullHD_,Medium_,Small_,Thumbnail_</parameter> 
+                <!--  Also used as id of each pictures:view. Any trailing "_" is removed -->
+                <parameter name="outputsPrefixes">FullHD_,Medium_,Small_,Thumbnail_</parameter>
+                <!--  Exact same order as "outputs" -->
+                <parameter name="viewsDescriptions">Full HD Size,Medium Size,Small Size,Thumbnail Size</parameter>
+                
             </parameters>
         </converter>
 

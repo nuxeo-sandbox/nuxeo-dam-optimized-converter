@@ -1,5 +1,6 @@
 package org.nuxeo.labs.dam.converters.workers;
 
+import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.binary.metadata.api.BinaryMetadataService;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -9,6 +10,8 @@ import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
+import org.nuxeo.ecm.core.convert.extension.ConverterDescriptor;
+import org.nuxeo.ecm.core.convert.service.ConversionServiceImpl;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
@@ -16,6 +19,7 @@ import org.nuxeo.ecm.core.versioning.VersioningService;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.ecm.platform.picture.api.*;
+import org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
@@ -28,6 +32,20 @@ import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTUR
 import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter.VIEWS_PROPERTY;
 import static org.nuxeo.labs.dam.converters.listeners.CustomPictureViewsGenerationListener.DISABLE_PICTURE_VIEWS_GENERATION_LISTENER;
 
+/**
+ * Create the picture:views field.
+ * <br/>
+ * WARNING: As the whole purpose of the plugin is to override the default conversions,
+ * <b>items declared in "pictureConversion" extension point are ignored</b>, all that count
+ * are the one declared in the XML extension (that can be overridden)
+ * => See picture-converter-contrib.xml and its related commandline-contrib.xml
+ * <br/>
+ * TODO:
+ * This is not the best way of doing things (having parameters in a converter contribution that are of no use for the
+ * conversion itself) => this needs some refactoring
+ * 
+ * @since 9.10
+ */
 public class PictureMultiConversionWorker extends AbstractWork {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +57,10 @@ public class PictureMultiConversionWorker extends AbstractWork {
     public static final String CONVERTER_NAME = "MultiOutputPictureResize";
 
     public static final long BILLION = 1_000_000_000;
+
+    protected static List<String> CONVERTER_PREFIXES = null;
+
+    protected static List<String> CONVERTER_DESCRIPTIONS = null;
 
     protected final String xpath;
 
@@ -56,6 +78,39 @@ public class PictureMultiConversionWorker extends AbstractWork {
     @Override
     public String getTitle() {
         return "Picture views generation";
+    }
+
+    protected void buildConverterInfo() {
+
+        if (CONVERTER_PREFIXES == null) {
+            CONVERTER_PREFIXES = new ArrayList<String>();
+            CONVERTER_DESCRIPTIONS = new ArrayList<String>();
+
+            ConverterDescriptor desc = ConversionServiceImpl.getConverterDescriptor(CONVERTER_NAME);
+            ;
+            Map<String, String> params = desc.getParameters();
+
+            String prefixes[] = params.get(MultiOutputPictureConverter.OUTPUTS_PREFIXES_KEY).split(",");
+            CONVERTER_PREFIXES = new ArrayList<String>(Arrays.asList(prefixes));
+            // Clear underscores if any
+            for (int i = 0; i < CONVERTER_PREFIXES.size(); i++) {
+                String noUnderscore = StringUtils.removeEnd(CONVERTER_PREFIXES.get(i), "_");
+                CONVERTER_PREFIXES.set(i, noUnderscore);
+            }
+
+            String descriptions[] = params.get(MultiOutputPictureConverter.VIEWS_DESCRIPTIONS_KEY).split(",");
+            CONVERTER_DESCRIPTIONS = new ArrayList<String>(Arrays.asList(descriptions));
+        }
+    }
+
+    protected List<String> getConverterPrefixes() {
+        buildConverterInfo();
+        return CONVERTER_PREFIXES;
+    }
+
+    protected List<String> getConverterDescriptions() {
+        buildConverterInfo();
+        return CONVERTER_DESCRIPTIONS;
     }
 
     @Override
@@ -86,9 +141,9 @@ public class PictureMultiConversionWorker extends AbstractWork {
 
         try {
             imageInfo = getImageInfo(blob);
-            if (isBigImageFile(imageInfo,blob)) {
-                BigPictureMultiConversionWorker worker =
-                        new BigPictureMultiConversionWorker(this.repositoryName,this.docId,this.xpath);
+            if (isBigImageFile(imageInfo, blob)) {
+                BigPictureMultiConversionWorker worker = new BigPictureMultiConversionWorker(this.repositoryName,
+                        this.docId, this.xpath);
                 WorkManager wm = Framework.getService(WorkManager.class);
                 wm.schedule(worker);
             } else {
@@ -96,7 +151,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
                 result = conversionService.convert(CONVERTER_NAME, new SimpleBlobHolder(blob), new HashMap<>());
             }
         } catch (Exception e) {
-            throw new NuxeoException("Could not transcode image file in "+workingDocument.getPath(),e);
+            throw new NuxeoException("Could not transcode image file in " + workingDocument.getPath(), e);
         } finally {
             TransactionHelper.startTransaction();
         }
@@ -115,7 +170,7 @@ public class PictureMultiConversionWorker extends AbstractWork {
         try {
             BinaryMetadataService service = Framework.getService(BinaryMetadataService.class);
             Map<String, Object> metadata = service.readMetadata(blob, true);
-            Map<String,Serializable> info = new HashMap<>();
+            Map<String, Serializable> info = new HashMap<>();
             info.put(ImageInfo.WIDTH, getLongValue(metadata.get("ImageWidth")));
             info.put(ImageInfo.HEIGHT, getLongValue(metadata.get("ImageHeight")));
             info.put(ImageInfo.COLOR_SPACE, (Serializable) metadata.get("ColorMode"));
@@ -137,7 +192,6 @@ public class PictureMultiConversionWorker extends AbstractWork {
         }
     }
 
-
     protected Long getLongValue(Object object) {
         if (object instanceof Integer) {
             return Long.valueOf(object.toString());
@@ -146,11 +200,9 @@ public class PictureMultiConversionWorker extends AbstractWork {
         }
     }
 
-
-    protected boolean isBigImageFile(ImageInfo imageInfo,Blob blob) {
-        return ((long)imageInfo.getWidth() * (long)imageInfo.getHeight()) > BILLION;
+    protected boolean isBigImageFile(ImageInfo imageInfo, Blob blob) {
+        return ((long) imageInfo.getWidth() * (long) imageInfo.getHeight()) > BILLION;
     }
-
 
     protected void updateDocument(ImageInfo imageInfo, BlobHolder result, DocumentModel workingDocument) {
         List<PictureView> viewList = buildViews(result.getBlobs());
@@ -175,45 +227,41 @@ public class PictureMultiConversionWorker extends AbstractWork {
         firePictureViewsGenerationDoneEvent(workingDocument);
     }
 
-
     protected List<PictureView> buildViews(List<Blob> blobs) {
         List<PictureView> pictureViews = new ArrayList<>();
 
         ImagingService imagingService = Framework.getService(ImagingService.class);
-        List<PictureConversion> conversionList = imagingService.getPictureConversions();
 
-        Map<String, PictureConversion> conversionMap = conversionList.stream().collect(
-                Collectors.toMap(x -> x.getId(), x -> x));
-
+        List<String> prefixes = getConverterPrefixes();
         for (Blob blob : blobs) {
             String filename = blob.getFilename();
-            int index = filename.indexOf("Output");
-            if (index <= 0) {
-                continue;
-            }
-            String id = filename.substring(0, index);
-            PictureConversion conversion = conversionMap.get(id);
-            if (conversion == null) {
-                continue;
-            }
 
-            PictureView view = new PictureViewImpl();
-            ImageInfo imageInfo = imagingService.getImageInfo(blob);
-            view.setTitle(id);
-            view.setBlob(blob);
-            view.setHeight(imageInfo.getHeight());
-            view.setWidth(imageInfo.getWidth());
-            view.setDescription(conversion.getDescription());
-            view.setImageInfo(imageInfo);
-            view.setFilename(blob.getFilename());
-            pictureViews.add(view);
+            for (int i = 0; i < prefixes.size(); i++) {
+                String prefix = prefixes.get(i);
+                if (filename.startsWith(prefix)) {
+
+                    ImageInfo imageInfo = imagingService.getImageInfo(blob);
+                    PictureView view = new PictureViewImpl();
+
+                    view.setTitle(prefix);
+                    view.setBlob(blob);
+                    view.setHeight(imageInfo.getHeight());
+                    view.setWidth(imageInfo.getWidth());
+                    // We know descriptions and prefixes arrays are in sync.
+                    view.setDescription(getConverterDescriptions().get(i));
+                    
+                    view.setImageInfo(imageInfo);
+                    view.setFilename(blob.getFilename());
+                    pictureViews.add(view);
+                    break;
+                }
+            }
         }
 
-        //sort views
+        // sort views
         Collections.sort(pictureViews, Comparator.comparingInt(PictureView::getHeight));
         return pictureViews;
     }
-
 
     protected void firePictureViewsGenerationDoneEvent(DocumentModel doc) {
         WorkManager workManager = Framework.getService(WorkManager.class);

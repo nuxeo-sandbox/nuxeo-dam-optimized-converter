@@ -11,16 +11,12 @@
             <destinationMimeType>image/png</destinationMimeType>
             <parameters>
                 <parameter name="CommandLineName">MultiOutputPictureResize</parameter>
-                <!--  Name used in the command line as #{the_name} -->
                 <parameter name="outputs">FullHDOutputFilePath,MediumOutputFilePath,SmallOutputFilePath,ThumbnailOutputFilePath</parameter>
-                <!--  Exact same order as "outputs". Value to pass to the -resize parameter as declared in the command-line -->
                 <parameter name="outputsResizesNames">FullHDResize,MediumResize,SmallResize,ThumbnailResize</parameter>
-                <!--  Exact same order as "outputs". Value to pass to the -resize parameter -->
                 <parameter name="outputsResizes">1920x>,1280x>,640x>,128x></parameter>
-                <!--  Exact same order as "outputs" -->
                 <parameter name="outputsExtensions">.png,.jpeg,.png,.jpeg</parameter>
-                <!--  Exact same order as "outputs" -->
-                <parameter name="outputsPrefix">BIG_,MEDIUM_,SMALL_,THUMB_</parameter> 
+                <parameter name="outputsPrefixes">BIG_,MEDIUM_,SMALL_,THUMB_</parameter> 
+                <parameter name="viewDescriptions">"Full HD Size,Medium Size,Small Size, Thumbnail Size"</parameter>
             </parameters>
         </converter>
 
