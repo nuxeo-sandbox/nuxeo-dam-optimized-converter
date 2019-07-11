@@ -1,8 +1,8 @@
-<component name="org.nuxeo.labs.dam.converters.pictures">
+<component name="overriden-MultiOutputPictureResize">
     <require>org.nuxeo.labs.dam.converters.commandline</require>
     <extension point="converter" target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl">
 
-        <converter class="org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter" name="MultiOutputPictureResize">
+        <converter class="org.nuxeo.labs.dam.converters.converters.MultiOutputPictureConverter" name="OverridenMultiOutputPictureResize">
             <sourceMimeType>image/*</sourceMimeType>
             <sourceMimeType>application/photoshop</sourceMimeType>
             <sourceMimeType>application/illustrator</sourceMimeType>
@@ -18,9 +18,9 @@
                 <!--  Exact same order as "outputs". Value to pass to the -resize parameter -->
                 <parameter name="outputsResizes">1920x>,1280x>,640x>,128x></parameter>
                 <!--  Exact same order as "outputs" -->
-                <parameter name="outputsExtensions">.jpeg,.jpeg,.jpeg,.jpeg</parameter>
+                <parameter name="outputsExtensions">.png,.jpeg,.png,.jpeg</parameter>
                 <!--  Exact same order as "outputs" -->
-                <parameter name="outputsPrefix">FullHD_,Medium_,Small_,Thumbnail_</parameter> 
+                <parameter name="outputsPrefix">BIG_,MEDIUM_,SMALL_,THUMB_</parameter> 
             </parameters>
         </converter>
 

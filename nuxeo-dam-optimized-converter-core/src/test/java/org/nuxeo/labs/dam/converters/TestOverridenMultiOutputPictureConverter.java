@@ -46,8 +46,12 @@ import static org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "nuxeo-dam-optimized-converter-core" })
-public class TestMultiOutputPictureConverter {
+@Deploy({ "nuxeo-dam-optimized-converter-core",
+        "nuxeo-dam-optimized-converter-core:overriden-picture-converter-contrib.xml" })
+public class TestOverridenMultiOutputPictureConverter {
+    
+    // See overriden-picture-converter-contrib.xml
+    public static final String CONVERTER_NAME = "OverridenMultiOutputPictureResize";
 
     @Inject
     ConversionService conversionService;
@@ -58,37 +62,36 @@ public class TestMultiOutputPictureConverter {
     }
 
     @Test
-    public void testDefaultConverter() {
+    public void testOverridenConverter() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
         BlobHolder result = conversionService.convert(CONVERTER_NAME,
                 new SimpleBlobHolder(new FileBlob(file, "image/jpeg")), new HashMap<>());
         Assert.assertEquals(4, result.getBlobs().size());
-        // Testing the _default_ converter. Check MultiOutputPictureConverter correctly named etc.
-        // Names are hard coded in the picture-converter-contrib.html
+        // Names are hard coded in overriden-picture-converter-contrib.xml
         // => If changed => change in the this test :-)
-        String[] PREFIXES = {"FullHD_", "Medium_", "Small_", "Thumbnail_"};
-        String[] EXTENSIONS = {".jpeg", ".jpeg", ".jpeg", ".jpeg"};
-        
-        for(Blob b : result.getBlobs()) {
+        String[] PREFIXES = { "BIG_" ,"MEDIUM_", "SMALL_", "THUMB_" };
+        String[] EXTENSIONS = { ".png", ".jpeg", ".png", ".jpeg" };
+
+        for (Blob b : result.getBlobs()) {
             String fileName = b.getFilename();
-            boolean found  = false;
-            for(String p : PREFIXES) {
-                if(fileName.startsWith(p)) {
+            boolean found = false;
+            for (String p : PREFIXES) {
+                if (fileName.startsWith(p)) {
                     found = true;
                     break;
                 }
             }
             assertTrue(found);
-            
-            found  = false;
-            for(String p : EXTENSIONS) {
-                if(fileName.endsWith(p)) {
+
+            found = false;
+            for (String p : EXTENSIONS) {
+                if (fileName.endsWith(p)) {
                     found = true;
                     break;
                 }
             }
             assertTrue(found);
-            
+
         }
 
         // test conversions are cached correctly

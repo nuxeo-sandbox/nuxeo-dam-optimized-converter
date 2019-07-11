@@ -1,5 +1,6 @@
 package org.nuxeo.labs.dam.converters.converters;
 
+import org.apache.commons.io.FilenameUtils;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
@@ -25,6 +26,10 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
     public static final String SOURCE_FILE_PATH_KEY = "inputFilePath";
     public static final String OUT_DIR_PATH_KEY = "outDirPath";
     public static final String OUTPUTS_KEY = "outputs";
+    public static final String OUTPUTS_RESIZES_NAMES_KEY = "outputsResizesNames";
+    public static final String OUTPUTS_RESIZES_KEY = "outputsResizes";
+    public static final String OUTPUTS_EXTENSIONS_KEY = "outputsExtensions";
+    public static final String OUTPUTS_PREFIXES_KEY = "outputsPrefix";
 
     @Override
     protected Map<String, Blob> getCmdBlobParameters(BlobHolder blobHolder, Map<String, Serializable> parameters) throws ConversionException {
@@ -44,11 +49,22 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
             Map<String, String> cmdStringParams = new HashMap<>();
             cmdStringParams.put(OUT_DIR_PATH_KEY, outDirPath.toString());
 
-            String outputStr = initParameters.get(OUTPUTS_KEY);
-            String outputs[] = outputStr.split(",");
-            for(String targetFileName : outputs) {
+            String outputs[] = initParameters.get(OUTPUTS_KEY).split(",");
+            String outPutsResizesNames[] = initParameters.get(OUTPUTS_RESIZES_NAMES_KEY).split(",");
+            String outPutsResizes[] = initParameters.get(OUTPUTS_RESIZES_KEY).split(",");
+            String outPutsExtensions[] = initParameters.get(OUTPUTS_EXTENSIONS_KEY).split(",");
+            String outPutsPrefixes[] = initParameters.get(OUTPUTS_PREFIXES_KEY).split(",");
+            
+            String sourceFileName = blobHolder.getBlob().getFilename();
+            sourceFileName = FilenameUtils.removeExtension(sourceFileName);
+            
+            // We must assume all our arrays have the same size
+            String targetFileName;
+            for(int i = 0; i < outputs.length; i++) {
+                targetFileName = outPutsPrefixes[i] + sourceFileName + outPutsExtensions[i];
                 Path targetFilePath = Paths.get(outDirPath.toString(), targetFileName);
-                cmdStringParams.put(targetFileName, targetFilePath.toString());
+                cmdStringParams.put(outputs[i], targetFilePath.toString());
+                cmdStringParams.put(outPutsResizesNames[i], outPutsResizes[i]);
             }
 
             // pass all converter parameters to the command line
