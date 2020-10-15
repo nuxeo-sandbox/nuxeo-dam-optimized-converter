@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.nuxeo.ecm.distribution</groupId>
     <artifactId>nuxeo-distribution</artifactId>
-    <version>10.10</version>
+    <version>10.10-HF33</version>
   </parent>
 
   <groupId>org.nuxeo.labs.dam.converters</groupId>
@@ -15,6 +15,7 @@
   <packaging>pom</packaging>
 
   <properties>
+    <nuxeo.target.platform.version>10.10</nuxeo.target.platform.version>
     <nuxeo.dam.nxr.version>6.4.3</nuxeo.dam.nxr.version>
   </properties>
 
@@ -42,17 +43,6 @@
       </releases>
       <snapshots>
         <updatePolicy>daily</updatePolicy>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>nuxeo-studio</id>
-      <url>https://connect.nuxeo.com/nuxeo/site/studio/maven</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <updatePolicy>always</updatePolicy>
         <enabled>true</enabled>
       </snapshots>
     </repository>
