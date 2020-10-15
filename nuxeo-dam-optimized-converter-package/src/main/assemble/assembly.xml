@@ -22,6 +22,7 @@
       <filterset>
         <filter token="VERSION" value="${maven.project.version}"/>
         <filter token="DISTRIB_VERSION" value="${nuxeo.distribution.version}"/>
+        <filter token="TARGET_PLATFORM_VERSION" value="${nuxeo.target.platform.version}" />
       </filterset>
     </copy>
     <copy file="${outdir}/nuxeo-dam-optimized-converter-package-artifacts.properties" todir="${outdir}/marketplace/install"/>

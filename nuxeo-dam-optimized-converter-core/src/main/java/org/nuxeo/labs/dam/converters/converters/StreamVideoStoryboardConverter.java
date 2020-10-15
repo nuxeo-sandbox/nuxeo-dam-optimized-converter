@@ -75,8 +75,7 @@ public class StreamVideoStoryboardConverter extends StoryboardConverter {
             Blob thumbBlob = Blobs.createBlobWithExtension(".jpeg");
             params.addNamedParameter(OUTPUT_FILE_PATH_PARAMETER, thumbBlob.getFile().getAbsolutePath());
             params.addNamedParameter(POSITION_PARAMETER, String.valueOf(timecode));
-            params.addNamedParameter(WIDTH_PARAM, commonParams.get(WIDTH_PARAM));
-            params.addNamedParameter(HEIGHT_PARAM, commonParams.get(HEIGHT_PARAM));
+            fillWidthAndHeightParameters(params, parameters);
             ExecResult result = cles.execCommand(FFMPEG_SCREENSHOT_RESIZE_COMMAND, params);
             if (!result.isSuccessful()) {
                 throw result.getError();
