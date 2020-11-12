@@ -20,15 +20,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.nuxeo.marketplace.dam</groupId>
-      <artifactId>marketplace</artifactId>
-      <classifier>nxr-server</classifier>
-      <type>zip</type>
-      <scope>provided</scope>
-      <version>${nuxeo.dam.nxr.version}</version>
-    </dependency>
-
     <!-- Additional bundles to be deployed by the MP -->
     <dependency>
       <groupId>org.nuxeo.labs.dam.converters</groupId>
