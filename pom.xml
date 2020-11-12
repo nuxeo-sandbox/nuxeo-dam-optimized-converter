@@ -9,7 +9,7 @@
 
   <groupId>org.nuxeo.labs.dam.converters</groupId>
   <artifactId>nuxeo-dam-optimized-converter-parent</artifactId>
-  <version>10.10.1-SNAPSHOT</version>
+  <version>10.10.2-SNAPSHOT</version>
   <name>Nuxeo dam optimized converter parent</name>
   <description/>
   <packaging>pom</packaging>
