@@ -1,0 +1,20 @@
+<component name="org.nuxeo.labs.dam.converters.picture">
+    <require>org.nuxeo.labs.dam.converters.picture.commandline</require>
+
+    <extension point="converter" target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl">
+
+        <converter class="org.nuxeo.labs.dam.converters.picture.converter.MultiOutputPictureConverter" name="MultiOutputPictureResize">
+            <sourceMimeType>image/*</sourceMimeType>
+            <sourceMimeType>application/photoshop</sourceMimeType>
+            <sourceMimeType>application/illustrator</sourceMimeType>
+            <sourceMimeType>application/postscript</sourceMimeType>
+            <destinationMimeType>image/jpeg</destinationMimeType>
+            <destinationMimeType>image/png</destinationMimeType>
+            <parameters>
+                <parameter name="CommandLineName">MultiOutputPictureResize</parameter>
+                <parameter name="outputs">FullHDOutputFilePath,MediumOutputFilePath,SmallOutputFilePath,ThumbnailOutputFilePath</parameter>
+            </parameters>
+        </converter>
+
+    </extension>
+</component>

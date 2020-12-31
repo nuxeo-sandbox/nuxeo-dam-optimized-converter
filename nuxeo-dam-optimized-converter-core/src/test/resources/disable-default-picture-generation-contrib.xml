@@ -1,5 +1,0 @@
-<component name="disable-picture-conversions">
-    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-        <listener class="org.nuxeo.ecm.platform.picture.listener.PictureViewsGenerationListener" name="pictureViewsGenerationListener" enabled="false"/>
-    </extension>
-</component>

@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.nuxeo.labs.dam.converters</groupId>
     <artifactId>nuxeo-dam-optimized-converter-parent</artifactId>
-    <version>10.10.2-SNAPSHOT</version>
+    <version>11.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -23,7 +23,11 @@
     <!-- Additional bundles to be deployed by the MP -->
     <dependency>
       <groupId>org.nuxeo.labs.dam.converters</groupId>
-      <artifactId>nuxeo-dam-optimized-converter-core</artifactId>
+      <artifactId>nuxeo-dam-optimized-picture-converter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.labs.dam.converters</groupId>
+      <artifactId>nuxeo-dam-optimized-video-converter</artifactId>
     </dependency>
 
   </dependencies>

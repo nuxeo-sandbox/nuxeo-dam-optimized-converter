@@ -1,0 +1,9 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: Nuxeo
+Bundle-Version: 1.0.0
+Bundle-Name: nuxeo-dam-optimized-video-converter
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: nuxeo-dam-optimized-video-converter;singleton=true
+Nuxeo-Component: OSGI-INF/video-converter-contrib.xml
