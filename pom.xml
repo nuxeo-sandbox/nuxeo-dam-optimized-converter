@@ -2,20 +2,21 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.nuxeo.ecm.distribution</groupId>
-    <artifactId>nuxeo-distribution</artifactId>
-    <version>10.10-HF29</version>
+    <groupId>org.nuxeo</groupId>
+    <artifactId>nuxeo-parent</artifactId>
+    <version>2021.29</version>
   </parent>
 
   <groupId>org.nuxeo.labs.dam.converters</groupId>
   <artifactId>nuxeo-dam-optimized-converter-parent</artifactId>
-  <version>10.10.2-SNAPSHOT</version>
+  <version>2021.0.0-SNAPSHOT</version>
   <name>Nuxeo dam optimized converter parent</name>
   <description/>
   <packaging>pom</packaging>
 
   <properties>
-    <nuxeo.target.platform.version>10.10</nuxeo.target.platform.version>
+    <nuxeo.skip.enforcer>true</nuxeo.skip.enforcer>
+    <nuxeo.target.version>2021.*</nuxeo.target.version>
   </properties>
 
   <modules>
@@ -25,23 +26,24 @@
 
   <repositories>
     <repository>
-      <id>public</id>
-      <url>http://maven.nuxeo.org/nexus/content/groups/public</url>
+      <id>maven-public</id>
+      <url>https://packages.nuxeo.com/repository/maven-public/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
       <snapshots>
-        <enabled>false</enabled>
+        <updatePolicy>always</updatePolicy>
+        <enabled>true</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>public-snapshot</id>
-      <url>http://maven.nuxeo.org/nexus/content/groups/public-snapshot</url>
+      <id>maven-private</id>
+      <url>https://packages.nuxeo.com/repository/maven-private/</url>
       <releases>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
       </releases>
       <snapshots>
-        <updatePolicy>daily</updatePolicy>
+        <updatePolicy>always</updatePolicy>
         <enabled>true</enabled>
       </snapshots>
     </repository>
@@ -49,9 +51,8 @@
 
   <pluginRepositories>
     <pluginRepository>
-      <id>public</id>
-      <url>http://maven.nuxeo.org/nexus/content/groups/public</url>
-      <name>Nuxeo releases</name>
+      <id>maven-public</id>
+      <url>https://packages.nuxeo.com/repository/maven-public/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -60,6 +61,7 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
   <dependencyManagement>
     <dependencies>
       <dependency>

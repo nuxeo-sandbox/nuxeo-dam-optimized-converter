@@ -15,15 +15,12 @@
   <!-- Production State: production_ready | testing | proto -->
   <production-state>testing</production-state>
   <platforms>
-    <platform>server-@TARGET_PLATFORM_VERSION@</platform>
-    <platform>server-@TARGET_PLATFORM_VERSION@-*</platform>
+    <platform>lts-@NUXEO_TARGET_VERSION@</platform>
   </platforms>
   <!-- Dependencies on other packages -->
   <dependencies>
   <!-- <package>another-package:1.0.0:1.0.0</package> -->
   <!-- If you require JSF UI package:  -->
-    <package>nuxeo-dam</package>
-    <package>nuxeo-@DISTRIB_VERSION@</package>
   <!-- If you require WEB UI package:  -->
   <!-- <package>nuxeo-web-ui</package> -->
   </dependencies>

@@ -1,0 +1,19 @@
+<component name="org.nuxeo.labs.dam.converters.bulk">
+
+  <require>org.nuxeo.ecm.core.bulk</require>
+  <require>org.nuxeo.ecm.platform.imaging.bulk</require>
+
+  <extension target="org.nuxeo.ecm.core.bulk" point="actions">
+    <action name="recomputeViews" inputStream="bulk/recomputeViews" bucketSize="100" batchSize="50" httpEnabled="false"
+      validationClass="org.nuxeo.ecm.platform.picture.recompute.RecomputeViewsActionValidation" />
+  </extension>
+
+  <extension target="org.nuxeo.runtime.stream.service" point="streamProcessor">
+    <streamProcessor name="recomputeViews" class="org.nuxeo.labs.dam.converters.bulk.OptimizedRecomputeViewsAction"
+      defaultConcurrency="${nuxeo.bulk.action.recomputeViews.defaultConcurrency:=2}"
+      defaultPartitions="${nuxeo.bulk.action.recomputeViews.defaultPartitions:=6}">
+      <policy name="default" maxRetries="3" delay="1s" maxDelay="10s" continueOnFailure="true" />
+    </streamProcessor>
+  </extension>
+
+</component>

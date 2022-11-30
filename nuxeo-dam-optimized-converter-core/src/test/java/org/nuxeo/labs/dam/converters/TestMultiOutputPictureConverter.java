@@ -21,7 +21,6 @@ package org.nuxeo.labs.dam.converters;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
@@ -36,17 +35,18 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static org.nuxeo.labs.dam.converters.workers.PictureMultiConversionWorker.CONVERTER_NAME;
+import static org.nuxeo.labs.dam.converters.bulk.OptimizedRecomputeViewsAction.CONVERTER_NAME;
+
 
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
-@Deploy({ "nuxeo-dam-optimized-converter-core" })
+@Deploy({
+        "nuxeo-dam-optimized-converter-core"
+})
 public class TestMultiOutputPictureConverter {
 
     @Inject
@@ -58,43 +58,14 @@ public class TestMultiOutputPictureConverter {
     }
 
     @Test
-    public void testDefaultConverter() {
+    public void testConverter() {
         File file = new File(getClass().getResource("/files/small.jpg").getPath());
-        BlobHolder result = conversionService.convert(CONVERTER_NAME,
-                new SimpleBlobHolder(new FileBlob(file, "image/jpeg")), new HashMap<>());
-        Assert.assertEquals(4, result.getBlobs().size());
-        // Testing the _default_ converter. Check MultiOutputPictureConverter correctly named etc.
-        // Names are hard coded in the picture-converter-contrib.html
-        // => If changed => change in the this test :-)
-        String[] PREFIXES = {"FullHD_", "Medium_", "Small_", "Thumbnail_"};
-        String[] EXTENSIONS = {".jpeg", ".jpeg", ".jpeg", ".jpeg"};
-        
-        for(Blob b : result.getBlobs()) {
-            String fileName = b.getFilename();
-            boolean found  = false;
-            for(String p : PREFIXES) {
-                if(fileName.startsWith(p)) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue(found);
-            
-            found  = false;
-            for(String p : EXTENSIONS) {
-                if(fileName.endsWith(p)) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue(found);
-            
-        }
+        BlobHolder result = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file,"image/jpeg")),new HashMap<>());
+        Assert.assertEquals(5,result.getBlobs().size());
 
-        // test conversions are cached correctly
-        BlobHolder result2 = conversionService.convert(CONVERTER_NAME,
-                new SimpleBlobHolder(new FileBlob(file, "image/jpeg")), new HashMap<>());
-        Assert.assertEquals(4, result2.getBlobs().size());
+        //test conversions are cached correctly
+        BlobHolder result2 = conversionService.convert(CONVERTER_NAME,new SimpleBlobHolder(new FileBlob(file,"image/jpeg")),new HashMap<>());
+        Assert.assertEquals(5,result2.getBlobs().size());
     }
 
 }

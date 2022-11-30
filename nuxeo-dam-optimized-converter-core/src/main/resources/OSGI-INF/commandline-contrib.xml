@@ -2,12 +2,11 @@
 
     <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
 
-	<!-- WARNING: There is tight relation with picture-converter-contrib.xml. The name of some variables used here are declared in icture-converter-contrib.xml -->
     <extension point="command" target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent">
         <command enabled="true" name="MultiOutputPictureResize">
             <commandLine>convert</commandLine>
-            <parameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten #{inputFilePath}[0] -resize "#{FullHDResize}" -write #{FullHDOutputFilePath} -resize "#{MediumResize}" -write #{MediumOutputFilePath} -resize "#{SmallResize}" -write #{SmallOutputFilePath} -resize "#{ThumbnailResize}" #{ThumbnailOutputFilePath}</parameterString>
-            <winParameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten #{inputFilePath}[0] -resize "#{FullHDResize}" -write #{FullHDOutputFilePath} -resize "#{MediumResize}" -write #{MediumOutputFilePath} -resize "#{SmallResize}" -write #{SmallOutputFilePath} -resize "#{ThumbnailResize}" #{ThumbnailOutputFilePath}</winParameterString>
+            <parameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white #{inputFilePath}[0] -write #{OriginalJpegOutputFilePath}.jpeg -resize "1920x1920>" -write #{FullHDOutputFilePath}.jpeg -resize "1280x1280>" -write #{MediumOutputFilePath}.jpeg -resize "640x640>" -write #{SmallOutputFilePath}.jpeg -resize "128x128>" #{ThumbnailOutputFilePath}.jpeg</parameterString>
+            <winParameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white #{inputFilePath}[0] -write #{OriginalJpegOutputFilePath}.jpeg -resize "1920x1920>" -write #{FullHDOutputFilePath}.jpeg -resize "1280x1280>" -write #{MediumOutputFilePath}.jpeg -resize "640x640>" -write #{SmallOutputFilePath}.jpeg -resize "128x128>" #{ThumbnailOutputFilePath}.jpeg</winParameterString>
             <testParameterString>-version</testParameterString>
             <installationDirective>You need to install ImageMagick.</installationDirective>
         </command>

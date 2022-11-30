@@ -53,10 +53,9 @@ import static org.junit.Assert.assertTrue;
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy({
         "nuxeo-dam-optimized-converter-core",
+        "org.nuxeo.ecm.platform.picture.core",
         "org.nuxeo.ecm.platform.tag",
-        "org.nuxeo.ecm.platform.video.api",
-        "org.nuxeo.ecm.platform.video.core",
-        "org.nuxeo.ecm.platform.video.convert",
+        "org.nuxeo.ecm.platform.video",
         "nuxeo-dam-optimized-converter-core:mock-blobprovider-conrib.xml"
 })
 public class TestStreamVideoConverter {
