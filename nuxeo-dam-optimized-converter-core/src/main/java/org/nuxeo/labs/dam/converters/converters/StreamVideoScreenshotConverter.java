@@ -7,7 +7,11 @@ import org.nuxeo.ecm.core.api.CloseableFile;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.convert.api.ConversionException;
 import org.nuxeo.ecm.core.convert.cache.SimpleCachableBlobHolder;
-import org.nuxeo.ecm.platform.commandline.executor.api.*;
+import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters;
+import org.nuxeo.ecm.platform.commandline.executor.api.CommandException;
+import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService;
+import org.nuxeo.ecm.platform.commandline.executor.api.CommandNotAvailable;
+import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult;
 import org.nuxeo.ecm.platform.video.convert.ScreenshotConverter;
 import org.nuxeo.labs.dam.converters.BlobHelper;
 import org.nuxeo.runtime.api.Framework;
@@ -57,14 +61,14 @@ public class StreamVideoScreenshotConverter extends ScreenshotConverter {
                 position = 0.0;
             }
         }
-        long positionParam = Math.round(position);
-        params.addNamedParameter(POSITION_PARAMETER, String.valueOf(positionParam));
+        params.addNamedParameter(POSITION_PARAMETER, String.valueOf(position));
         ExecResult res = cles.execCommand(FFMPEG_SCREENSHOT_COMMAND, params);
         if (!res.isSuccessful()) {
             throw res.getError();
         }
         outBlob.setMimeType("image/jpeg");
-        outBlob.setFilename(String.format("video-screenshot-%05d.000.jpeg", positionParam));
+        outBlob.setFilename(String.format("video-screenshot-%.2f-seconds.jpeg", position));
+
         return new SimpleCachableBlobHolder(outBlob);
     }
 
