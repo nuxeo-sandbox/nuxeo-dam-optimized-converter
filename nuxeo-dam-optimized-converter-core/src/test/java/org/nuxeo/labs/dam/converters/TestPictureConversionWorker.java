@@ -33,6 +33,7 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.picture.api.PictureView;
 import org.nuxeo.ecm.platform.picture.api.adapters.MultiviewPicture;
+import org.nuxeo.ecm.platform.picture.core.ImagingFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -46,14 +47,10 @@ import static org.nuxeo.ecm.platform.picture.recompute.RecomputeViewsAction.Reco
 import static org.nuxeo.labs.dam.converters.listeners.OptimizedPictureChangedListener.GENERATE_PICTURE_VIEW_EVENT;
 
 @RunWith(FeaturesRunner.class)
-@Features({AutomationFeature.class, CoreBulkFeature.class})
+@Features({AutomationFeature.class, CoreBulkFeature.class, ImagingFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy({
-        "nuxeo-dam-optimized-converter-core",
-        "org.nuxeo.ecm.platform.picture.core",
-        "org.nuxeo.ecm.platform.tag",
-        "org.nuxeo.ecm.platform.video",
-        "org.nuxeo.binary.metadata"
+        "nuxeo-dam-optimized-converter-core"
 })
 public class TestPictureConversionWorker {
 
@@ -86,7 +83,7 @@ public class TestPictureConversionWorker {
 
         Blob thumbnailBlob = thumbnail.getBlob();
         Assert.assertEquals("image/jpeg",thumbnailBlob.getMimeType());
-        Assert.assertTrue(thumbnailBlob.getFilename().endsWith("_thumbnail.jpg"));
+        Assert.assertTrue(thumbnailBlob.getFilename().endsWith("_thumbnail.jpeg"));
     }
 
     @Test
