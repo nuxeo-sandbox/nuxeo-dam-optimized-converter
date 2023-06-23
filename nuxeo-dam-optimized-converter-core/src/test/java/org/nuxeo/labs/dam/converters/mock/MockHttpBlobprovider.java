@@ -1,9 +1,5 @@
 package org.nuxeo.labs.dam.converters.mock;
 
-import org.nuxeo.ecm.core.api.Blob;
-import org.nuxeo.ecm.core.blob.*;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -12,6 +8,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collections;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.blob.BlobInfo;
+import org.nuxeo.ecm.core.blob.BlobManager;
+import org.nuxeo.ecm.core.blob.BlobProvider;
+import org.nuxeo.ecm.core.blob.ManagedBlob;
+import org.nuxeo.ecm.core.blob.SimpleManagedBlob;
 
 public class MockHttpBlobprovider implements BlobProvider {
 

@@ -1,13 +1,8 @@
 package org.nuxeo.labs.dam.converters.converters;
 
-import org.apache.commons.io.FilenameUtils;
-import org.nuxeo.common.utils.Path;
-import org.nuxeo.ecm.core.api.Blob;
-import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
-import org.nuxeo.ecm.core.convert.api.ConversionException;
-import org.nuxeo.ecm.platform.video.VideoInfo;
-import org.nuxeo.ecm.platform.video.convert.VideoConversionConverter;
-import org.nuxeo.labs.dam.converters.BlobHelper;
+import static org.nuxeo.ecm.platform.video.convert.Constants.INPUT_FILE_PATH_PARAMETER;
+import static org.nuxeo.ecm.platform.video.convert.Constants.OUTPUT_FILE_NAME_PARAMETER;
+import static org.nuxeo.ecm.platform.video.convert.Constants.OUTPUT_FILE_PATH_PARAMETER;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.nuxeo.ecm.platform.video.convert.Constants.*;
+import org.apache.commons.io.FilenameUtils;
+import org.nuxeo.common.utils.Path;
+import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
+import org.nuxeo.ecm.core.convert.api.ConversionException;
+import org.nuxeo.ecm.platform.video.VideoInfo;
+import org.nuxeo.ecm.platform.video.convert.VideoConversionConverter;
+import org.nuxeo.labs.dam.converters.BlobHelper;
 
 public class StreamVideoConversionConverter extends VideoConversionConverter {
 

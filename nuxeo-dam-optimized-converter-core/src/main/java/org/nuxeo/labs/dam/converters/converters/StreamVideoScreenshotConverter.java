@@ -1,5 +1,12 @@
 package org.nuxeo.labs.dam.converters.converters;
 
+import static org.nuxeo.ecm.platform.video.convert.Constants.INPUT_FILE_PATH_PARAMETER;
+import static org.nuxeo.ecm.platform.video.convert.Constants.POSITION_PARAMETER;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Map;
+
 import org.apache.commons.io.FilenameUtils;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
@@ -15,13 +22,6 @@ import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult;
 import org.nuxeo.ecm.platform.video.convert.ScreenshotConverter;
 import org.nuxeo.labs.dam.converters.BlobHelper;
 import org.nuxeo.runtime.api.Framework;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Map;
-
-import static org.nuxeo.ecm.platform.video.convert.Constants.INPUT_FILE_PATH_PARAMETER;
-import static org.nuxeo.ecm.platform.video.convert.Constants.POSITION_PARAMETER;
 
 public class StreamVideoScreenshotConverter extends ScreenshotConverter {
 

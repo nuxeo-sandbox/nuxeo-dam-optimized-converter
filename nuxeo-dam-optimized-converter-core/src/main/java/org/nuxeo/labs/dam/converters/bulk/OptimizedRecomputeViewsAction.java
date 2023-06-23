@@ -1,14 +1,31 @@
 package org.nuxeo.labs.dam.converters.bulk;
 
+import static org.nuxeo.ecm.core.api.CoreSession.ALLOW_VERSION_WRITE;
+import static org.nuxeo.ecm.core.api.versioning.VersioningService.DISABLE_AUTOMATIC_VERSIONING;
+import static org.nuxeo.ecm.core.api.versioning.VersioningService.DISABLE_AUTO_CHECKOUT;
+import static org.nuxeo.ecm.core.bulk.BulkServiceImpl.STATUS_STREAM;
+import static org.nuxeo.ecm.platform.dublincore.listener.DublinCoreListener.DISABLE_DUBLINCORE_LISTENER;
+import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTURE_INFO_PROPERTY;
+import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter.VIEWS_PROPERTY;
+import static org.nuxeo.lib.stream.computation.AbstractComputation.INPUT_1;
+import static org.nuxeo.lib.stream.computation.AbstractComputation.OUTPUT_1;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.nuxeo.binary.metadata.api.BinaryMetadataService;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.api.model.Property;
@@ -23,26 +40,6 @@ import org.nuxeo.ecm.platform.picture.listener.PictureViewsGenerationListener;
 import org.nuxeo.ecm.platform.picture.recompute.RecomputeViewsAction;
 import org.nuxeo.lib.stream.computation.Topology;
 import org.nuxeo.runtime.api.Framework;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static org.nuxeo.ecm.core.api.CoreSession.ALLOW_VERSION_WRITE;
-import static org.nuxeo.ecm.core.api.versioning.VersioningService.DISABLE_AUTOMATIC_VERSIONING;
-import static org.nuxeo.ecm.core.api.versioning.VersioningService.DISABLE_AUTO_CHECKOUT;
-import static org.nuxeo.ecm.core.bulk.BulkServiceImpl.STATUS_STREAM;
-import static org.nuxeo.ecm.core.bulk.action.SetPropertiesAction.PARAM_DISABLE_AUDIT;
-import static org.nuxeo.ecm.platform.dublincore.listener.DublinCoreListener.DISABLE_DUBLINCORE_LISTENER;
-import static org.nuxeo.ecm.platform.picture.api.ImagingDocumentConstants.PICTURE_INFO_PROPERTY;
-import static org.nuxeo.ecm.platform.picture.api.adapters.AbstractPictureAdapter.VIEWS_PROPERTY;
-import static org.nuxeo.lib.stream.computation.AbstractComputation.INPUT_1;
-import static org.nuxeo.lib.stream.computation.AbstractComputation.OUTPUT_1;
 
 public class OptimizedRecomputeViewsAction extends RecomputeViewsAction {
 
@@ -104,7 +101,7 @@ public class OptimizedRecomputeViewsAction extends RecomputeViewsAction {
                 workingDocument.putContextData(ALLOW_VERSION_WRITE, Boolean.TRUE);
             }
             workingDocument.putContextData("disableNotificationService", Boolean.TRUE);
-            workingDocument.putContextData(PARAM_DISABLE_AUDIT, Boolean.TRUE);
+            workingDocument.putContextData(CoreSession.DISABLE_AUDIT_LOGGER, Boolean.TRUE);
             workingDocument.putContextData(DISABLE_AUTO_CHECKOUT, Boolean.TRUE);
             workingDocument.putContextData(PictureViewsGenerationListener.DISABLE_PICTURE_VIEWS_GENERATION_LISTENER, Boolean.TRUE);
             workingDocument.putContextData(DISABLE_DUBLINCORE_LISTENER, Boolean.TRUE);
@@ -125,7 +122,7 @@ public class OptimizedRecomputeViewsAction extends RecomputeViewsAction {
             List<PictureConversion> conversionList = imagingService.getPictureConversions();
 
             Map<String, PictureConversion> conversionMap = conversionList.stream().collect(
-                    Collectors.toMap(x -> x.getId(), x -> x));
+                    Collectors.toMap(PictureConversion::getId, x -> x));
 
             MimetypeRegistry registry = Framework.getService(MimetypeRegistry.class);
 
@@ -167,15 +164,5 @@ public class OptimizedRecomputeViewsAction extends RecomputeViewsAction {
             pictureViews.sort(Comparator.comparingInt(PictureView::getHeight));
             return pictureViews;
         }
-
-        protected Long getLongValue(Object object) {
-            if (object instanceof Integer) {
-                return Long.valueOf(object.toString());
-            } else {
-                return null;
-            }
-        }
-
     }
-
 }

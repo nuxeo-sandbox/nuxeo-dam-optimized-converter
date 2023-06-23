@@ -18,6 +18,14 @@
  */
 package org.nuxeo.labs.dam.converters;
 
+import static org.junit.Assert.assertEquals;
+import static org.nuxeo.ecm.platform.picture.recompute.RecomputeViewsAction.RecomputeViewsComputation.PICTURE_VIEWS_GENERATION_DONE_EVENT;
+import static org.nuxeo.labs.dam.converters.listeners.OptimizedPictureChangedListener.GENERATE_PICTURE_VIEW_EVENT;
+
+import java.io.File;
+
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,13 +46,6 @@ import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.TransactionalFeature;
-
-import javax.inject.Inject;
-import java.io.File;
-
-import static org.junit.Assert.assertEquals;
-import static org.nuxeo.ecm.platform.picture.recompute.RecomputeViewsAction.RecomputeViewsComputation.PICTURE_VIEWS_GENERATION_DONE_EVENT;
-import static org.nuxeo.labs.dam.converters.listeners.OptimizedPictureChangedListener.GENERATE_PICTURE_VIEW_EVENT;
 
 @RunWith(FeaturesRunner.class)
 @Features({AutomationFeature.class, CoreBulkFeature.class, ImagingFeature.class})

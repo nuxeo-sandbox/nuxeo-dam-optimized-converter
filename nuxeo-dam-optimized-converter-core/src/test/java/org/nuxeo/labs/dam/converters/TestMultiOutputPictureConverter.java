@@ -18,6 +18,14 @@
  */
 package org.nuxeo.labs.dam.converters;
 
+import static org.junit.Assert.assertTrue;
+import static org.nuxeo.labs.dam.converters.bulk.OptimizedRecomputeViewsAction.CONVERTER_NAME;
+
+import java.io.File;
+import java.util.HashMap;
+
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,13 +40,6 @@ import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-
-import javax.inject.Inject;
-import java.io.File;
-import java.util.HashMap;
-
-import static org.junit.Assert.assertTrue;
-import static org.nuxeo.labs.dam.converters.bulk.OptimizedRecomputeViewsAction.CONVERTER_NAME;
 
 
 @RunWith(FeaturesRunner.class)

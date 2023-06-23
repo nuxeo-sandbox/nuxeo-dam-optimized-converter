@@ -1,13 +1,13 @@
 package org.nuxeo.labs.dam.converters;
 
+import java.io.IOException;
+import java.net.URI;
+
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.blob.BlobManager;
 import org.nuxeo.ecm.core.blob.BlobProvider;
 import org.nuxeo.ecm.core.blob.ManagedBlob;
 import org.nuxeo.runtime.api.Framework;
-
-import java.io.IOException;
-import java.net.URI;
 
 public class BlobHelper {
 

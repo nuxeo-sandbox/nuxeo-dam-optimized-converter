@@ -18,6 +18,16 @@
  */
 package org.nuxeo.labs.dam.converters;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,15 +48,6 @@ import org.nuxeo.ecm.platform.video.VideoInfo;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
-
-import javax.inject.Inject;
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertTrue;
 
 @RunWith(FeaturesRunner.class)
 @Features(PlatformFeature.class)
@@ -78,7 +79,7 @@ public class TestStreamVideoConverter {
         Blob blob = getLocalBlob();
         VideoInfo videoInfo = VideoHelper.getVideoInfo(blob);
         Map<String, Serializable> parameters = new HashMap<>();
-        parameters.put("height", 100l);
+        parameters.put("height", 100L);
         parameters.put("videoInfo", videoInfo);
         BlobHolder result = conversionService.convert("convertToMP4",new SimpleBlobHolder(blob),parameters);
         Assert.assertEquals(1,result.getBlobs().size());
@@ -107,7 +108,7 @@ public class TestStreamVideoConverter {
         Blob blob = getRemoteBlob();
         VideoInfo videoInfo = VideoHelper.getVideoInfo(blob);
         Map<String, Serializable> parameters = new HashMap<>();
-        parameters.put("height", 100l);
+        parameters.put("height", 100L);
         parameters.put("videoInfo", videoInfo);
         BlobHolder result = conversionService.convert("convertToMP4",new SimpleBlobHolder(blob),parameters);
         Assert.assertEquals(1,result.getBlobs().size());
@@ -138,7 +139,7 @@ public class TestStreamVideoConverter {
         blobInfo.key = "mockprovider:https://github.com/nuxeo-sandbox/nuxeo-dam-optimized-converter/raw/master/nuxeo-dam-optimized-converter-core/src/test/resources/files/nuxeo.3gp";
         blobInfo.mimeType = "video/mp4";
         blobInfo.filename = "nuxeo.3gp";
-        blobInfo.length = 3563674l;
+        blobInfo.length = 3563674L;
         return myProvider.readBlob(blobInfo);
     }
 

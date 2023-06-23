@@ -1,14 +1,5 @@
 package org.nuxeo.labs.dam.converters.converters;
 
-import org.nuxeo.ecm.core.api.Blob;
-import org.nuxeo.ecm.core.api.Blobs;
-import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
-import org.nuxeo.ecm.core.convert.api.ConversionException;
-import org.nuxeo.ecm.core.convert.cache.SimpleCachableBlobHolder;
-import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters;
-import org.nuxeo.ecm.platform.convert.plugins.CommandLineBasedConverter;
-import org.nuxeo.runtime.api.Framework;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,6 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
+import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
+import org.nuxeo.ecm.core.convert.api.ConversionException;
+import org.nuxeo.ecm.core.convert.cache.SimpleCachableBlobHolder;
+import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters;
+import org.nuxeo.ecm.platform.convert.plugins.CommandLineBasedConverter;
+import org.nuxeo.runtime.api.Framework;
 
 public class MultiOutputPictureConverter extends CommandLineBasedConverter {
 
@@ -45,7 +45,7 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
             cmdStringParams.put(OUT_DIR_PATH_KEY, outDirPath.toString());
 
             String outputStr = initParameters.get(OUTPUTS_KEY);
-            String outputs[] = outputStr.split(",");
+            String[] outputs = outputStr.split(",");
             for(String targetFileName : outputs) {
                 targetFileName = targetFileName.trim();
                 Path targetFilePath = Paths.get(outDirPath.toString(), targetFileName);
@@ -57,10 +57,7 @@ public class MultiOutputPictureConverter extends CommandLineBasedConverter {
                 cmdStringParams.put(entry.getKey(), (String) entry.getValue());
             }
             // pass all the converter descriptor parameters to the commandline
-            for (Map.Entry<String, String> entry : initParameters.entrySet()) {
-                cmdStringParams.put(entry.getKey(), entry.getValue());
-
-            }
+            cmdStringParams.putAll(initParameters);
             return cmdStringParams;
         } catch (IOException e) {
             throw new ConversionException(e.getMessage(), e);
