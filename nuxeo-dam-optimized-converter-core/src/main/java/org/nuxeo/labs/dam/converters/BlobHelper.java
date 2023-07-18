@@ -13,8 +13,7 @@ public class BlobHelper {
 
     public static String getDirectUrl(Blob blob) {
         String uriStr = null;
-        if (blob instanceof ManagedBlob) {
-            ManagedBlob managedBlob = (ManagedBlob) blob;
+        if (blob instanceof ManagedBlob managedBlob) {
             BlobProvider blobProvider = Framework.getService(BlobManager.class).getBlobProvider(blob);
             try {
                 URI uri = blobProvider.getURI(managedBlob, BlobManager.UsageHint.DOWNLOAD,null);

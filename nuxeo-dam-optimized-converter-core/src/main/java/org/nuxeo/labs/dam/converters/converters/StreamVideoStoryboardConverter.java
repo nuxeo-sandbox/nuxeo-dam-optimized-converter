@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.CloseableFile;
@@ -31,6 +33,8 @@ import org.nuxeo.labs.dam.converters.BlobHelper;
 import org.nuxeo.runtime.api.Framework;
 
 public class StreamVideoStoryboardConverter extends StoryboardConverter {
+
+    private static final Logger log = LogManager.getLogger(StreamVideoStoryboardConverter.class);
 
     @Override
     public BlobHolder convert(BlobHolder blobHolder, Map<String, Serializable> parameters) throws ConversionException {
