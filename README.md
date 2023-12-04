@@ -1,7 +1,8 @@
 ## Description
 This plugin provides image and video converters optimized for large files:
-- the image converter produces all the default conversions with one ImageMagick command. Depending on the file the performance gain goes from 2.5x to 5x.
-- the video converter streams the video files directly from S3 instead of making a local copy (requires direct download from S3 to be enabled in nuxeo.conf) 
+
+- The image converter produces all the default conversions with one ImageMagick command. Depending on the file the performance gain goes from 2.5x to 5x.
+- The video converter streams the video files directly from S3 instead of making a local copy (requires direct download from S3 to be enabled in nuxeo.conf) 
 
 [![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=Sandbox/sandbox_nuxeo-dam-optimized-converter-master)](https://qa.nuxeo.org/jenkins/job/Sandbox/job/sandbox_nuxeo-dam-optimized-converter-master/)
 
