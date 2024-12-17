@@ -24,7 +24,7 @@ import static org.nuxeo.labs.dam.converters.bulk.OptimizedRecomputeViewsAction.C
 import java.io.File;
 import java.util.HashMap;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -24,7 +24,7 @@ import static org.nuxeo.labs.dam.converters.listeners.OptimizedPictureChangedLis
 
 import java.io.File;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.Assert;
 import org.junit.Test;
