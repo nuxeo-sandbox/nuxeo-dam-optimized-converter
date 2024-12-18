@@ -35,8 +35,8 @@ jobs:
             {"id": "maven-internal", "username": "${{ secrets.NUXEO_MAVEN_USER }}", "password": "${{ secrets.NUXEO_MAVEN_TOKEN }}"}
           ]'
 
-      - name: Install IM
-        run: sudo apt-get -y install imagemagick
+      - name: Install IM,ffmpeg
+        run: sudo apt-get -y install imagemagick ffmpeg
 
       - name: Build with Maven
         run: mvn -B install --file pom.xml -DskipDocker=true
