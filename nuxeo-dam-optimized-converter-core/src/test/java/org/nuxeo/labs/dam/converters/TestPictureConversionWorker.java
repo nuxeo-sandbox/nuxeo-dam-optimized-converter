@@ -41,14 +41,14 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.picture.api.PictureView;
 import org.nuxeo.ecm.platform.picture.api.adapters.MultiviewPicture;
-import org.nuxeo.ecm.platform.picture.core.ImagingFeature;
+import org.nuxeo.ecm.platform.picture.core.ImagingCoreFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.test.runner.TransactionalFeature;
 
 @RunWith(FeaturesRunner.class)
-@Features({AutomationFeature.class, CoreBulkFeature.class, ImagingFeature.class})
+@Features({AutomationFeature.class, CoreBulkFeature.class, ImagingCoreFeature.class})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 @Deploy({
         "nuxeo-dam-optimized-converter-core"
